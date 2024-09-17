@@ -1,0 +1,251 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+       <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="canDismiss()">{{"ADD_TO_CART" | translate}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content [fullscreen]="true">
+  <ion-fab slot="fixed" horizontal="end" vertical="top">
+    <ion-fab-button color="medium" (click)="presentActionSheet()">
+      <ion-icon name="cart-plus" color="light" id="end" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <div class="img">
+    <div class="top">
+      <div class="back_div">
+        <ion-icon name="arrow-back-outline" color="light" (click)="returnPage()"></ion-icon>
+        <!-- <ion-icon name="cart-plus" color="light" id="end" (click)="presentActionSheet()"></ion-icon> -->
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="first">
+        <h4><strong>{{ evento.Tituloevento }}</strong></h4>
+      </div>
+    </div>
+    <img id="myimg" [src]="evento.Fotoevento | imagen" alt="">
+  </div>
+  <ion-segment color="events" [scrollable]="true" [(ngModel)]="segmento">
+    <ion-segment-button value="event">
+      <ion-icon ios="list-outline" md="list-sharp"></ion-icon>
+      <ion-label>{{ "EVENT" | translate  }}</ion-label>
+    </ion-segment-button>
+    @if(this._ep.evento_detalle.Detalle && this._ep.evento_detalle.Detalle.length > 0){
+    <ion-segment-button value="include">
+      <ion-icon ios="content-view-regular" md="content-view-filled"></ion-icon>
+      <ion-label>{{ "INCLUDE" | translate  }}</ion-label>
+    </ion-segment-button>
+    }
+    @if(this._ep.evento_detalle.Horario && this._ep.evento_detalle.Horario.length > 0){
+    <ion-segment-button value="schedule">
+      <ion-icon ios="time-outline" md="time-sharp"></ion-icon>
+      <ion-label>{{ "SCHEDULE" | translate }}</ion-label>
+    </ion-segment-button>
+    }
+    @if((this._ep.evento_detalle.Personal && this._ep.evento_detalle.Personal.length > 0) ||
+    (this._ep.evento_detalle.PersonalExterno && this._ep.evento_detalle.PersonalExterno.length > 0)){
+    <ion-segment-button value="ourteam">
+      <ion-icon ios="people-outline" md="people-sharp"></ion-icon>
+      <ion-label>{{ "OUR_TEAM" | translate }}</ion-label>
+    </ion-segment-button>
+    }
+    @if(this._ep.evento_detalle.Galeria && this._ep.evento_detalle.Galeria.length > 0){
+    <ion-segment-button value="gallery">
+      <ion-icon ios="images-outline" md="images-sharp"></ion-icon>
+      <ion-label>{{ "GALLERY" | translate }}</ion-label>
+    </ion-segment-button>
+    }
+    @if(this._ep.evento_detalle.Agenda && this._ep.evento_detalle.Agenda.length > 0){
+    <ion-segment-button value="calendar" (click)="setDefaultCalendar()">
+      <ion-icon ios="calendar-schedule" md="calendar-schedule-fill"></ion-icon>
+      <ion-label>{{ "DIARY" | translate }}</ion-label>
+    </ion-segment-button>
+    }
+  </ion-segment>
+  @switch(segmento){
+    @case ("event"){
+      <ion-grid class="event">
+        <ion-row>
+          <ion-col class="ion-text-start">{{"START"|translate}}: <strong>{{evento.Fechaini|date: 'dd/MM/YYYY'}}</strong></ion-col>
+          <ion-col class="ion-text-end">{{"END"|translate}}: <strong>{{evento.Fechafin|date: 'dd/MM/YYYY'}}</strong></ion-col>
+        </ion-row>
+        @if(evento.Finasignacion){
+          <ion-row>
+            <ion-col>
+              <ion-icon ios="calendar-outline" md="calendar-sharp"></ion-icon> {{ 'LAST_DAY_TO_GET_IT' | translate }}: <strong style="color:brown;">{{evento.Finasignacion | date: 'dd/MM/YYYY'}}</strong>
+            </ion-col>
+          </ion-row>
+        }
+        @if(evento.Ocultar_Precio != "1"){
+          <ion-row>
+            @if(evento.Precio != null && evento.Precio != 0){                  
+              <ion-col class="ion-text-start">
+                <ion-icon ios="card-outline" md="card-sharp"></ion-icon>
+                @if(evento.Monto_Descuentoautomev != null && evento.Monto_Descuentoautomev != 0){
+                  <strong style="text-decoration: line-through; "> {{evento.Precio | currency:'Q':'code'}}</strong>
+                }
+                <strong style="color: rgb(0, 127, 0);"> {{evento.Precio - evento.Monto_Descuentoautomev | currency:'Q':'code'}}</strong>
+              </ion-col>
+            }
+            @if(evento.Precio == null || evento.Precio == 0){
+              <ion-col class="ion-text-start">
+                <strong color="primary">{{"FREE" | translate}}</strong>
+              </ion-col>
+            }
+            @if(evento.Desc_Descuentoautomev != null && evento.Desc_Descuentoautomev != ""){
+              <ion-col class="ion-text-end">
+                <ion-badge color="light" style="color: rgb(188, 88, 236);">
+                  <ion-icon ios="pricetag-outline" md="pricetag-sharp"></ion-icon>
+                  {{evento.Desc_Descuentoautomev}}
+                </ion-badge>
+              </ion-col>                
+            }
+          </ion-row>
+        }
+        <ion-row>
+          @if(evento.Pagos > 1){
+            <ion-col class="ion-text-start">
+              <ion-badge color="events">
+                <ion-icon ios="cash-outline" md="cash-sharp"></ion-icon>
+                {{"UP_TO_PAYMENTS" | translate:{value:evento.Pagos} }}
+              </ion-badge>
+            </ion-col>
+          }                
+          @if(evento.Diploma == 1){
+            <ion-col class="ion-text-end">
+              <ion-badge color="light" style="color: rgb(227, 103, 45);">
+                <ion-icon ios="diploma-outline" md="diploma-sharp"></ion-icon>
+                {{ "INCLUDES_DIPLOMA" | translate }}
+              </ion-badge>
+            </ion-col>  
+            }
+        </ion-row>
+      </ion-grid>
+    }
+    @case ("include"){
+      @if(this._ep.evento_detalle.Detalle && this._ep.evento_detalle.Detalle.length != 0){
+        <div class="include">
+        @for(detalle of this._ep.evento_detalle.Detalle; track detalle){
+          <div [innerHtml]="detalle.Detalle"></div>
+        }
+        </div>
+      }
+    }
+    @case ("schedule"){
+      <div class="schedule">
+        @for(horario of this._ep.evento_detalle.Horario; track horario){
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4">{{ horario.Dianombre | uppercase }}</ion-col>
+            <ion-col size="4"><strong>{{ 'START' | translate }}:</strong></ion-col>
+            <ion-col size="4"><strong>{{ 'FINISH' | translate }}:</strong></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4" offset="4">{{horario.Horaini | date:'hh:mm a'}}</ion-col>
+            <ion-col size="4">{{horario.Horafin | date:'hh:mm a'}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4" offset="4"><strong>{{ 'LOUNGE' | translate }}:</strong></ion-col>
+            <ion-col size="4"><strong>{{ 'TOWER' | translate }}:</strong></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4" offset="4">{{horario.Salon}}</ion-col>
+            <ion-col size="4">{{horario.Torre}}</ion-col>
+          </ion-row>
+        </ion-grid>
+        }
+      </div>
+    }
+    @case ("ourteam"){
+      <swiper-container speed="500" effect="cards"  grab-cursor="true" class="ourteam">
+        @for(personalExt of this._ep.evento_detalle.PersonalExterno; track personalExt){
+          <swiper-slide>
+            <img [src]="personalExt.RUTA[0].RUTA | imagenperfil" alt="" >
+            <div>
+              <h4>{{ personalExt.Nombre }}</h4>
+              <p>{{ personalExt.Puesto }}</p>
+            </div>
+          </swiper-slide>
+        }
+        <!-- <swiper-slide>Slide 1</swiper-slide>
+        <swiper-slide>Slide 2</swiper-slide>
+        <swiper-slide>Slide 3</swiper-slide> -->
+      </swiper-container>
+    }
+    @case ("gallery"){
+      @if(this._ep.evento_detalle.Galeria && this._ep.evento_detalle.Galeria.length > 0){
+        <div class="gallery" >
+          @for(galeria of this._ep.evento_detalle.Galeria; track galeria){
+              <div>
+                <img [src]="galeria.RUTA | imagen" alt="" (click)="openModal(galeria.RUTA)">
+              </div>
+            }
+             
+        </div>
+      }
+    }
+    @case ("calendar"){
+      <div class="calendar">
+        <div class="calendar-title">
+          {{ "AGENDA_ACTIVITIES" | translate }}
+        </div>
+        <ion-segment color="events" [scrollable]="true" [(ngModel)]="calendario">
+          @for(fecha of this._ep.agenda; track fecha){
+            <ion-segment-button [value]="fecha.fecha" (click)="changeCalendar(fecha)">
+              <ion-label>{{ fecha.fecha | date:"EEE dd MMM yyyy" }}</ion-label>
+            </ion-segment-button>                                
+          }          
+        </ion-segment>
+        <ion-list>
+          @for(dia of agendaDia; track dia){
+            <ion-item>
+              <ion-avatar>
+                <!-- <img style="width:15px; height:15px" class="{{this.comparar(dia)}}"> -->
+                <img style="width:15px; height:15px" class="after">
+                <br>
+                <!-- <div style="font-size: 9px;">{{ this.status(dia) }}</div> -->
+                <div style="font-size: 9px;">En espera</div>
+              </ion-avatar>
+              <div style="display: flex; flex-direction: column;">
+                <strong>{{dia.Titulo}}</strong>
+                <ion-label style="color:#aaaaaa" *ngIf="dia.description">{{dia.Descripcion}}</ion-label>
+                <ion-label icon-start>
+                    <ion-icon name="pin" color="tertiary" small></ion-icon>
+                    {{dia.Torre}} - Salon: {{dia.Salon}}
+                </ion-label>
+                <ion-label *ngIf="dia.Horaini != null && dia.Horafin != null" icon-start>
+                    <ion-icon name="time" color="tertiary" small></ion-icon>
+                    {{dia.Horaini | date:'h:mm a'}} - {{dia.Horafin | date:'h:mm a'}}</ion-label>
+                <ion-label *ngIf="dia.Horaini == null && dia.Horafin == null" icon-start>
+                    <ion-icon name="time" color="tertiary" small></ion-icon>
+                    {{ 'ALL_DAY' | translate }}</ion-label>
+                <div class="row" *ngIf="dia.Track">
+                    <div class="col-lg-12">
+                        <ion-badge [ngStyle]="{'background-color':dia.Color, 'opacity':.756}"><strong>{{ dia.Track }}</strong></ion-badge>
+                    </div>
+                </div>
+              </div>
+            </ion-item>
+          }
+        </ion-list>
+      </div>
+    }
+  }
+  
+  <!-- <ion-button id="open-custom-dialog" expand="block" (click)="openModal()">Open Custom Dialog</ion-button> -->
+  <ion-modal id="example-modal" #modal [isOpen]="isModalOpen" [enterAnimation]="enterAnimation" [leaveAnimation]="leaveAnimation" [canDismiss]="canDismiss2">
+    <ng-template>
+      <div class="wrapper">
+        <div class="close">
+          <ion-icon name="close" slot="end" (click)="modal.dismiss()"></ion-icon>
+        </div>
+        <img [src]="this.rutaImagenModal | imagen" alt="">
+      </div>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

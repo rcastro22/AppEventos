@@ -3,5 +3,9 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "proxies": [{
+    "path":"/proxyapi/",
+    "proxiUrl":"https://betaeventos.galileo.edu"
+  }]
 }

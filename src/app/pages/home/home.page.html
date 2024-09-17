@@ -1,0 +1,118 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="events">
+    <ion-buttons ion-button slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <img left src="./assets/imgs/avtr.png" style="width: 30px">
+    </ion-buttons>
+    <ion-title>{{ 'UPCOMING_EVENTS' | translate }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button ion-button icon-only (click)="showRadioLang()">
+          <ion-icon name="globe"></ion-icon>
+      </ion-button>
+      <ion-button ion-button icon-only (click)="_cp.ver_carrito()">
+          <ion-icon name="cart"></ion-icon>
+          <ion-badge color="danger" class="carrito-numero" *ngIf="_cp.items.length > 0">
+              {{_cp.items.length}}              
+          </ion-badge>
+      </ion-button> &nbsp; &nbsp;
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if(this.eventoBuscar.length === 0){
+    <div class="ion-text-center no-events ">
+      <div>
+        <ion-icon name="calendar-outline" style="font-size: 60px;" class="icon-5x"></ion-icon>
+        <br> {{ 'NO_UPCOMING_EVENTS' | translate }}
+      </div>
+    </div>
+  }
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <!-- <ion-nav-link router-direction="forward" [component]="component">
+    <ion-button>Go to Page Two</ion-button>
+  </ion-nav-link> -->
+
+  <ion-list lines="none">
+  @for(principal of this.eventoBuscar; track principal){
+    
+    <ion-item>
+      <ion-card routerDirection="forward" [routerLink]="['/evento']" [state]="{ evento:principal }">
+        @if(principal.Precio == null || principal.Precio == 0){
+          <div class="freebanner">
+            <div>{{"FREE" | translate}}</div>
+          </div>
+        }
+        <img [src]="principal.Fotoevento | imagen" class="imgDecora">
+
+        <ion-card-content>
+          <h4><strong>{{ principal.Tituloevento }}</strong></h4>
+          <ion-grid >
+            <ion-row>
+              <ion-col class="ion-text-start">{{"START"|translate}}: <strong>{{principal.Fechaini|date: 'dd/MM/YYYY'}}</strong></ion-col>
+              <ion-col class="ion-text-end">{{"END"|translate}}: <strong>{{principal.Fechafin|date: 'dd/MM/YYYY'}}</strong></ion-col>
+            </ion-row>
+            @if(principal.Finasignacion){
+              <ion-row>
+                <ion-col>
+                  <ion-icon ios="calendar-outline" md="calendar-sharp"></ion-icon> {{ 'LAST_DAY_TO_GET_IT' | translate }}: <strong style="color:brown;">{{principal.Finasignacion | date: 'dd/MM/YYYY'}}</strong>
+                </ion-col>
+              </ion-row>
+            }
+            @if(principal.Ocultar_Precio != "1"){
+              <ion-row>
+                @if(principal.Precio != null && principal.Precio != 0){                  
+                  <ion-col class="ion-text-start">
+                    <ion-icon ios="card-outline" md="card-sharp"></ion-icon>
+                    @if(principal.Monto_Descuentoautomev != null && principal.Monto_Descuentoautomev != 0){
+                      <strong style="text-decoration: line-through; "> {{principal.Precio | currency:'Q':'code'}}</strong>
+                    }
+                    <strong style="color: rgb(0, 127, 0);"> {{principal.Precio - principal.Monto_Descuentoautomev | currency:'Q':'code'}}</strong>
+                  </ion-col>
+                }
+                @if(principal.Precio == null || principal.Precio == 0){
+                  <ion-col class="ion-text-start">
+                    <strong color="primary">{{"FREE" | translate}}</strong>
+                  </ion-col>
+                }
+                @if(principal.Desc_Descuentoautomev != null && principal.Desc_Descuentoautomev != ""){
+                  <ion-col class="ion-text-end">
+                    <ion-badge color="light" style="color: rgb(188, 88, 236);">
+                      <ion-icon ios="pricetag-outline" md="pricetag-sharp"></ion-icon>
+                      {{principal.Desc_Descuentoautomev}}
+                    </ion-badge>
+                  </ion-col>                
+                }
+              </ion-row>
+            }
+            <ion-row>
+              @if(principal.Pagos > 1){
+                <ion-col class="ion-text-start">
+                  <ion-badge color="events">
+                    <ion-icon ios="cash-outline" md="cash-sharp"></ion-icon>
+                    {{"UP_TO_PAYMENTS" | translate:{value:principal.Pagos} }}
+                  </ion-badge>
+                </ion-col>
+              }                
+              @if(principal.Diploma == 1){
+                <ion-col class="ion-text-end">
+                  <ion-badge color="light" style="color: rgb(227, 103, 45);">
+                    <ion-icon ios="diploma-outline" md="diploma-sharp"></ion-icon>
+                    {{ "INCLUDES_DIPLOMA" | translate }}
+                  </ion-badge>
+                </ion-col>  
+              }
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  
+  }
+  </ion-list>
+</ion-content>

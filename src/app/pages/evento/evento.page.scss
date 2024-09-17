@@ -1,0 +1,247 @@
+ion-toolbar {
+    --background: var(--ion-color-events-contrast);
+}
+
+ion-toolbar.ios {
+    --border-width: 0 0 0px !important;
+}
+
+ion-header.md {
+    box-shadow: 0 0;
+}
+
+ion-content {
+    --background: #fff;
+    
+    .img {
+        background: black;
+        overflow: hidden;
+        /* height: 250px; */
+        height: 30%;
+        width: 100%;
+        position: relative;
+        display: block;
+    }
+
+    .top {
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        position: absolute;
+        width: 100%;
+        z-index: 999;
+
+        .back_div {
+            font-size: 30px;
+            position: relative;
+            #end {
+                float: right;
+                margin-right: 40px;
+            }
+        }
+    }
+
+    .bottom {
+        bottom: 10px;
+        left: 10px;
+        position: absolute;
+        right: 10px;
+        z-index: 999;
+        height: auto;
+        display: grid;
+        /* grid-template-columns: 25% 55% 20%; */
+        grid-template-columns: 100%;
+        /* grid-template-rows: 80px auto 80px; */
+        grid-template-rows: auto;
+        color: #fff;
+
+        .first {
+            justify-self: center;
+            text-align: center;
+        }
+    }
+
+    #myimg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.4;
+    }
+}
+
+.event {
+    margin: 10px;
+}
+
+.include {
+    margin: 20px;
+
+    div {
+        padding-bottom: 15px;
+    }
+}
+
+.schedule {
+    margin: 10px;
+    padding: 10px;    
+}
+
+
+.calendar {
+
+    .calendar-title {
+        padding: 30px;
+        font-size: 1.5em;
+        font-weight: bold;
+        align-items: center;
+    }
+    .in {
+        background-color: forestgreen
+    }
+    .before {
+        background-color: slategray
+    }
+    .after {
+        background-color: royalblue
+    }
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px;
+    /* display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%; */
+
+    div {
+        //max-width: 50%;
+        width: 50%;
+        padding: 10px;
+    }
+}
+
+
+
+/* swiper-container {
+    --swiper-pagination-bullet-inactive-color: var(--ion-text-color-step-800, #cccccc);
+    --swiper-pagination-color: var(--ion-color-primary, #0054e9);
+    --swiper-pagination-progressbar-bg-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.25);
+    --swiper-scrollbar-bg-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.1);
+    --swiper-scrollbar-drag-bg-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.5);
+  }
+
+swiper-slide {
+    display: flex;
+    position: relative;
+  
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  
+    width: 100%;
+    height: 100%;
+  
+    font-size: 18px;
+  
+    text-align: center;
+    box-sizing: border-box;
+  }
+  
+swiper-slide img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+  } */
+
+  swiper-container.ourteam {
+    width: 280px;
+    height: auto;
+    padding: 20px;
+  }
+
+  swiper-container.ourteam swiper-slide {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #1a1a58;
+    height: auto;
+
+    img {
+        object-fit: fill ;
+        width: 100%;
+        height: 80%;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        text-align: center;
+    }
+  }
+
+
+
+
+
+  ion-modal#example-modal {
+    --width: fit-content;
+    --width: 90%;
+    --height: 75%;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  }
+  
+  ion-modal#example-modal h1 {
+    margin: 20px 20px 10px 20px;
+  }
+  
+  ion-modal#example-modal ion-icon {
+    margin-right: 6px;
+  
+    width: 48px;
+    height: 48px;
+  
+    padding: 4px 0;
+  
+    color: #aaaaaa;
+  }
+  
+  /* ion-modal#example-modal .wrapper {
+    margin-bottom: 10px;
+  } */
+
+  .modal-wrapper.ion-overlay-wrapper {
+    background: transparent;
+  }
+
+  .wrapper {
+    background: transparent;
+  }
+
+  .close {
+    border-radius: 25px;
+    background-color: #ffffff00;
+    display: flex;
+    justify-content: flex-end;
+
+    ion-icon {
+        margin-right: 6px;
+        width: 48px;
+        height: 48px;
+        /* padding: 4px 0; */
+        color: #000000;
+        background: #ffffffba;
+        border-radius: 25px;
+    }
+  }

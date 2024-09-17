@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true">
+  <div class="banner"></div>
+  <ion-grid>
+    <!-- <ion-fab horizontal="end" vertical="top">
+      <ion-fab-button ion-fab mini clear (click)="close_page()">
+        <ion-icon name="close"></ion-icon>
+      </ion-fab-button>
+    </ion-fab> -->
+    <ion-row class="ion-text-center">
+      <ion-col class="top-20">
+        <img src="./assets/imgs/logogalileo.png">
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-text-center">
+      <ion-col class="welcome">
+        <h2>{{ 'WELCOME_TO' | translate }} EVENTOS GALILEO</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-text-center">
+      <ion-col class="top-5">
+        <h4>{{ 'ENTER_WITH' | translate }}:</h4>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-text-center">
+      <ion-col>
+        <ion-button (click)="signInWithGoogle()" icon-left expand="block">
+          <ion-icon name="logo-google" slot="start"></ion-icon>
+          Gmail
+        </ion-button>
+        <ion-button (click)="signInWithGoogle()" icon-left expand="block">
+          <ion-icon name="person" slot="start"></ion-icon>
+          Usuario
+        </ion-button>
+        <!-- <ion-button (click)="signInWithFacebook()" color="facebook" icon-left shape="round" expand="block">
+          <ion-icon name="logo-facebook" slot="start"></ion-icon>
+          Facebook
+        </ion-button> -->
+        <!-- <button (click)="signInUser()" ion-button color="user" icon-left round block>
+            <ion-icon name="person"></ion-icon>
+            {{ 'USR_PASS' | translate}}
+        </button> -->
+      </ion-col>
+    </ion-row>
+    <p style="width: 100%; text-align: center;">O</p>
+    <ion-row class="ion-text-center">
+      <ion-col>
+        <ion-button size="small" color="secondary" (click)="close_page()">
+          {{ "REMEMBER_ME_LATER" | translate }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

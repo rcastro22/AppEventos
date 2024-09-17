@@ -1,0 +1,7 @@
+ion-tab-button {
+    --color-selected:var(--ion-color-events);
+}
+
+ion-tab-button.tab-selected {
+    border-top: 5px solid;
+}

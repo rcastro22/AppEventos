@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="events">
+    <ion-buttons ion-button slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ 'PROFILE' | translate }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button ion-button icon-only >
+          <ion-icon name="cart"></ion-icon>
+          <ion-badge color="danger" class="carrito-numero" *ngIf="_cp.items.length > 0">
+              {{_cp.items.length}}              
+          </ion-badge>
+      </ion-button> &nbsp; &nbsp;
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+</ion-content>
