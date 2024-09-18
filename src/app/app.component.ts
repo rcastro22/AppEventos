@@ -11,6 +11,7 @@ import { PAGES } from './config/pages.config';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { addIcons } from 'ionicons';
 import { Storage } from '@ionic/storage';
+import { environment } from 'src/environments/environment.prod';
 
 register();
 
@@ -87,7 +88,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       GoogleAuth.initialize({
-        clientId: '213739652036-mihsbsqs8h3jrdam3ujkk3ufcbt66rrf.apps.googleusercontent.com',
+        clientId: environment.clientId,
         scopes: ['profile','email'],
         grantOfflineAccess: true,
       })

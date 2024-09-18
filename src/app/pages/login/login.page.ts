@@ -54,6 +54,10 @@ export class LoginPage implements OnInit {
         );
         this.signInWithEventos();
       })
+    })
+    .catch(data => {
+      console.log(data);
+      
     });
 
     console.log(googleUser);
