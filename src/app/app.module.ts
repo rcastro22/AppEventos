@@ -14,6 +14,7 @@ import { ImagenPipe,ImagenExtPipe } from 'src/app/pipes/imagen/imagen.pipe';
 
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { Drivers } from '@ionic/storage';
 registerLocaleData(localeEs,'es');
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
@@ -29,7 +30,12 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
-    IonicStorageModule.forRoot(), 
+    IonicStorageModule.forRoot(
+      {
+        name: '__mydb',
+        driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
+      }
+    ), 
     AppRoutingModule, 
     TranslateModule.forRoot({
       defaultLanguage: 'es',

@@ -62,7 +62,6 @@ export class AppComponent {
   }
 
   async onOnInit(){
-    await this.storage.create();
     this._up.cargar_storage().then(() => {
       if(this._up.language != ""){
         this.translateService.use(this._up.language);
@@ -88,7 +87,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       GoogleAuth.initialize({
-        clientId: environment.clientId,
+        clientId: isPlatform('ios') ? environment.iosClientId : environment.clientId,
         scopes: ['profile','email'],
         grantOfflineAccess: true,
       })

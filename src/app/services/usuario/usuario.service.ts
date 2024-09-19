@@ -11,12 +11,13 @@ import { NavController } from '@ionic/angular'
 
 import { Perfil } from "../../config/perfil.config";
 import { LoginPage } from 'src/app/pages/login/login.page';
-import { Observable, catchError, map, of } from 'rxjs';
-import { Login } from 'src/app/interfaces/Login';
+import { Observable, catchError, lastValueFrom, map, of } from 'rxjs';
+import { Login, Perfil as PerfilClass } from 'src/app/interfaces/Login';
 import { RegistroPage } from 'src/app/pages/registro/registro.page';
 import { TabsPage } from 'src/app/pages/tabs/tabs.page';
 
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { GoogleAuth, User } from '@codetrix-studio/capacitor-google-auth';
+import { TokenInfo } from 'src/app/interfaces/GoogleSignIn';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +60,11 @@ export class UsuarioService {
   ) { 
     //this.basepath = url_services;
     this.basepath = url_services;
+    this.initStorage();
+  }
+
+  async initStorage(){
+    await this.storage.create();
   }
 
   async translateSer(value:any, parm?:any) {
@@ -117,91 +123,74 @@ export class UsuarioService {
     
   }
 
+
+  async loginGoogle(){
+    let GoogleUser = await GoogleAuth.signIn();
+    
+    if(GoogleUser != null){
+      let InfoToken = await lastValueFrom(this.info_token(GoogleUser.authentication.accessToken));
+      if(InfoToken != null){
+        this.cargar_credenciales_google(GoogleUser,InfoToken);
+        let EventosUser = await this.loginEventos();
+        if(EventosUser != null && EventosUser.Perfil.length > 0){
+          let dat = EventosUser.Perfil[0];
+          this.cargar_perfil_v2(dat);
+          this.guardar_storage();
+
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   async verifica_login2(){
     if(!this.logueado){
       await this.cargar_storage();
-      if(this.credenciales.accessToken){ 
+      if(this.credenciales && this.credenciales.accessToken){
         if(new Date(this.credenciales.expiresIn!) > new Date()){
-          let data = await this.loginEventos();
-          let perfil = data as Login;
-          if(perfil.Perfil != null){
-            let dat = perfil.Perfil[0];
-            if(dat){
-              this.cargar_parfil(
-                dat.Email,
-                dat.Nombres,
-                dat.Apellidos,
-                dat.Telefono,
-                dat.Nacionalidad,
-                dat.Dpi,
-                dat.Pasaporte,
-                new Date(dat.Fechanac).toDateString(),
-                dat.Pas_Pais,
-                dat.Lugar_Trabajo,
-                dat.Puesto,
-                dat.Telefono_Trabajo,
-                dat.Compartir,
-                dat.Cambiardocumento,
-                dat.Dpi_Pais,
-                dat.Id_Galileo,
-                dat.EsMenor
-              );
-            }else{
-              this.cerrar_sesion();
-            }
-          }
-        } else {
-          console.log('token expirado');
-          //this.cerrar_sesion();
-          let refresh = await GoogleAuth.refresh().then(res => {
-            this.info_token(res.accessToken).subscribe(data => {
+          let EventosUser = await this.loginEventos();
 
-              const field = 'exp';
-              // El valor viene en segundos, y se debe traslada a milisegundos
-              const temp = data[field as keyof Object].toString();
-              
-              this.cargar_credenciales(
-                this.credenciales.nombre!,
-                this.credenciales.email!,
-                this.credenciales.photoURL!,
-                this.credenciales.uid!,
-                "google",
-                res.accessToken,
-                //new Date().getTime() + parseInt(temp),
-                parseInt(temp+"000"),
-                this.credenciales.userId!
-              );
-              this.guardar_storage();
-            })
-          });
-          console.log(refresh);
-          
+          if(EventosUser != null && EventosUser.Perfil.length > 0){
+            let dat = EventosUser.Perfil[0];
+            this.cargar_perfil_v2(dat);
+          }
+          else {
+            this.cerrar_sesion();
+          }          
         }
       } 
-    } else {
+    } 
+    if(this.credenciales && this.credenciales.accessToken) {
       if(new Date(this.credenciales.expiresIn!) < new Date()){
-        let refresh = await GoogleAuth.refresh().then(res => {
-          this.info_token(res.accessToken).subscribe(data => {
-
-            const field = 'exp';
-            // El valor viene en segundos, y se debe traslada a milisegundos
-            const temp = data[field as keyof Object].toString();
-            
+        console.log('token expirado');
+        let authentication = await GoogleAuth.refresh();
+        if(authentication != null){
+          let InfoToken = await lastValueFrom(this.info_token(authentication.accessToken));
+          if(InfoToken != null){
             this.cargar_credenciales(
               this.credenciales.nombre!,
               this.credenciales.email!,
               this.credenciales.photoURL!,
               this.credenciales.uid!,
               "google",
-              res.accessToken,
-              //new Date().getTime() + parseInt(temp),
-              parseInt(temp+"000"),
+              authentication.accessToken,
+              parseInt(InfoToken.exp+"000"),
               this.credenciales.userId!
             );
+
+            let EventosUser = await this.loginEventos();
+
+            if(EventosUser != null && EventosUser.Perfil.length > 0){
+              let dat = EventosUser.Perfil[0];
+              this.cargar_perfil_v2(dat);
+            }else{
+              this.cerrar_sesion();
+            }
             this.guardar_storage();
-          })
-        });
-        console.log(refresh);
+          }
+        }
       }
     }
   }
@@ -292,7 +281,9 @@ export class UsuarioService {
 
     return this.http.get(url)
       .pipe(
-        map(resp => resp),
+        map(resp => {
+          return JSON.parse(JSON.stringify(resp)) as TokenInfo
+        }),
         catchError(() => {
           return of();
         })
@@ -309,7 +300,7 @@ export class UsuarioService {
     let url = `${this.basepath}login`;
     url = url + `?TOKEN=${this.credenciales.accessToken}&TIPO=${this.credenciales.providerId}`;
 
-    let promesa = new Promise((resolve, reject) => {
+    let promesa = new Promise<Login>((resolve, reject) => {
       this.http.post(url,{})
         .pipe(
           map(res => {
@@ -318,10 +309,10 @@ export class UsuarioService {
             return perfil;
           }),
           catchError(error => {
-            return of([{Perfil: null}]);
+            return of();
           })
         )
-        .subscribe(data => {
+        .subscribe((data:Login) => {
           resolve(data);
         })
     });
@@ -347,6 +338,18 @@ export class UsuarioService {
     this.credenciales.accessToken = accessToken;
     this.credenciales.expiresIn = expiresIn;
     this.credenciales.userId = userId;
+  }
+
+  cargar_credenciales_google(dataGoogle:User,dataToken:TokenInfo){
+    this.credenciales = {}
+    this.credenciales.nombre = dataGoogle.name;
+    this.credenciales.email = dataGoogle.email;
+    this.credenciales.photoURL = dataGoogle.imageUrl;
+    this.credenciales.uid = dataGoogle.id;
+    this.credenciales.providerId = 'google';
+    this.credenciales.accessToken = dataGoogle.authentication.accessToken;
+    this.credenciales.expiresIn = parseInt(dataToken.exp+"000");
+    this.credenciales.userId = dataGoogle.id;
   }
 
   cargar_parfil(
@@ -388,8 +391,32 @@ export class UsuarioService {
     this.perfil.es_menor = es_menor;
   }
 
+  cargar_perfil_v2(perfil:PerfilClass){
+    this.perfil = Perfil;
+    this.logueado = true;
+    this.perfil.email = perfil.Email;
+    this.perfil.nombres = perfil.Nombres;
+    this.perfil.apellidos = perfil.Apellidos;
+    this.perfil.telefono = perfil.Telefono;
+    this.perfil.nacionalidad = perfil.Nacionalidad;
+    this.perfil.dpi = perfil.Dpi;
+    this.perfil.pasaporte = perfil.Pasaporte;
+    this.perfil.fechanac = new Date(perfil.Fechanac).toDateString();
+    this.perfil.pas_pais = perfil.Pas_Pais;
+    this.perfil.lugagr_trabajo = perfil.Lugar_Trabajo;
+    this.perfil.puesto = perfil.Puesto;
+    this.perfil.telefono_trabajo = perfil.Telefono_Trabajo;
+    this.perfil.compartir = perfil.Compartir;
+    this.perfil.cambiardocumento = perfil.Cambiardocumento;
+    this.perfil.dpi_pais = perfil.Dpi_Pais;
+    this.perfil.id_galileo = perfil.Id_Galileo;
+    this.perfil.es_menor = perfil.EsMenor;
+  }
+
   public guardar_storage() {
     if (isPlatform('capacitor')) {
+      console.log("dispositivo");
+      
       // Dispositivo movil
       this.storage.set("credenciales", this.credenciales);
       this.storage.set("perfil", this.perfil);
@@ -427,34 +454,20 @@ export class UsuarioService {
   }
 
   cargar_storage() {
-    let promesa = new Promise((resolve, reject) => {
+    let promesa = new Promise(async (resolve, reject) => {
       if (isPlatform('capacitor')) {
+        console.log("lee vars");
+        
         // Dispositivo movil
         //this.storage.ready().then(() => {
-          this.storage.get("credenciales").then(credencial => {
-            if (credencial) {
-              this.credenciales = credencial;
-            }
-          });
-          this.storage.get("networking").then(network => {
-            if (network) {
-              this.networking = network;
-            }
-          });
-          this.storage.get("lang").then(lang => {
-            if (lang) {
-              this.language = lang;
-            }
-          });
-          this.storage.get("perfil").then(perfil => {
-            if (perfil) {
-              this.perfil = perfil;
-            }
-            
-          });
+          this.credenciales = await this.storage.get("credenciales") as Credenciales;
+          this.networking = await this.storage.get("networking");
+          this.language = await this.storage.get("lang");
+          this.perfil = await this.storage.get("perfil");
           resolve(0);
         //});
       } else {
+        console.log("lee vars pc");
         // Computadora     
         if (localStorage.getItem("nombre"))
           this.credenciales.nombre = localStorage.getItem("nombre")!;

@@ -40,7 +40,6 @@ export class HomePage implements OnInit {
    }
 
   async ngOnInit() {
-    await this.storage.create();
     let value = await this.getTextLoading();
     await this.showLoader(value); 
     //this.getTextLoading().then((value) => {
