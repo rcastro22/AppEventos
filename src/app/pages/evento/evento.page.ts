@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActionSheetController, AnimationController, ModalController } from '@ionic/angular';
+import { ActionSheetController, AlertController, AnimationController, LoadingController, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { DetalleLogin } from 'src/app/interfaces/DetalleLogin';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
@@ -22,6 +22,7 @@ export class EventoPage implements OnInit {
   agendaDia:any = [];
   isModalOpen:boolean = false;
   rutaImagenModal:string = "";
+  loading:any;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -31,7 +32,9 @@ export class EventoPage implements OnInit {
     public _ep:EventosService,
     public _cp:CarritoService,
     public _up:UsuarioService,
-    private animationCtrl: AnimationController
+    private animationCtrl: AnimationController,
+    private loadingCtrl:LoadingController,
+    private alertCtrl:AlertController
   ) { 
     addIcons({
       "cart-plus": "assets/icon/mdi--cart-plus.svg",
@@ -64,6 +67,85 @@ export class EventoPage implements OnInit {
     this._ep.cargar_detalle(this.evento);
   }
 
+  async getTextLoading(msg:string) {
+    return await this._cp.translateSer(msg);
+  }
+
+  async showLoader(msg:string){
+    this.loading = await this.loadingCtrl.create({
+      spinner: "bubbles",
+      message: msg,
+      //translucent: true,
+      //showBackdrop: false,
+      //mode: "ios",
+      //animated: true
+    });
+    await this.loading.present();
+  }
+
+
+  /* Agregar evento al carrito */
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Agregar a carrito?',
+      buttons: [
+        {
+          text: 'Si',
+          role: 'yes',
+        },
+        {
+          text: 'No',
+          role: 'No',
+        },
+      ],
+    });
+
+    await actionSheet.present();
+
+    const { role } = await actionSheet.onWillDismiss();
+    console.log(this.evento.Evento);
+    if(role == 'yes'){
+      this.addCart();
+    }
+  }
+
+  async addCart(){
+    if(!this._up.logueado){
+      await this._up.valida_login(document.querySelector('ion-page'),true);
+    }
+    if(this._up.logueado){
+      console.log("agrga carrito");
+      await this.showLoader(""); 
+      this._cp.agregar_carrito(this.evento)
+      .subscribe(async data => {
+        this.loading.dismiss();
+        if(data) {
+          if(data.Error) {
+
+          } else {
+            let alert = this.alertCtrl.create({
+              header: await this._up.translateSer("ADDED"),
+              message: data.Mensaje,
+              buttons: ["Ok"]
+            });
+            (await alert).present();
+            this._cp.cargar_carrito();
+            this._ep.cargar_eventos().subscribe(data=>{
+              this._ep.eventos = data.Eventos;
+              this._ep.categorias = data.Categorias;
+            });
+            if(this.evento.Precio != null && this.evento.Precio != 0) {
+              this.router.navigate(["/carrito"]);
+            }
+          }
+        }
+      })
+    }
+  }
+
+
+
+  /* Agenda */
   setDefaultCalendar(){
     console.log(this._ep.agenda[0].fecha);
     
@@ -104,64 +186,8 @@ export class EventoPage implements OnInit {
   }
 
 
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'confirm');
-  }
 
-  canDismiss = async () => {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Are you sure?',
-      buttons: [
-        {
-          text: 'Yes',
-          role: 'confirm',
-        },
-        {
-          text: 'No',
-          role: 'cancel',
-        },
-      ],
-    });
-
-    actionSheet.present();
-
-    const { role } = await actionSheet.onWillDismiss();
-
-    return role === 'confirm';
-  };
-  
-
-  async presentActionSheet() {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Agregar a carrito?',
-      buttons: [
-        {
-          text: 'Si',
-          /* role: 'destructive',
-          data: {
-            action: 'delete',
-          }, */
-        },
-        {
-          text: 'No',
-          /* data: {
-            action: 'share',
-          }, */
-        },
-        /* {
-          text: 'Cancel',
-          role: 'cancel',
-          data: {
-            action: 'cancel',
-          },
-        }, */
-      ],
-    });
-
-    await actionSheet.present();
-  }
-
-
+  /* Modal Imagen */
   canDismiss2 = async () => {
     console.log("entro");
     

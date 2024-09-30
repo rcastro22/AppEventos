@@ -12,6 +12,7 @@ class PermissionsService {
   ){}
   async canActivate(): Promise<boolean> {
     if(!this._up.logueado){
+      await this._up.verifica_login2().catch(()=>this._up.cerrar_sesion());
       await this._up.valida_login(document.querySelector('ion-page'),true)
     }
     return this._up.logueado;

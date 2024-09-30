@@ -10,10 +10,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
-  },
-  {
     path: 'tabs',
     loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
   },
@@ -80,6 +76,18 @@ const routes: Routes = [
   {
     path: 'modal-image',
     loadChildren: () => import('./pages/modal-image/modal-image.module').then( m => m.ModalImagePageModule)
+  },
+  {
+    path: 'popover',
+    loadChildren: () => import('./pages/popover/popover.module').then( m => m.PopoverPageModule)
+  },
+  {
+    path: 'cuotas',
+    loadChildren: () => import('./pages/cuotas/cuotas.module').then( m => m.CuotasPageModule)
+  },
+  {
+    path: 'pago',
+    loadChildren: () => import('./pages/pago/pago.module').then( m => m.PagoPageModule)
   }
 ];
 

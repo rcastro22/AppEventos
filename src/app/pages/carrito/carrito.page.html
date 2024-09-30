@@ -8,5 +8,235 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  @if(this._cp.items.length === 0 && this._cp.pendiente_pago.length === 0 && this._cp.ordenes_vencidas.length === 0 && this._cp.cuotas_pendientes.length === 0){
+    <div class="ion-text-center empty_cart ">
+      <div>
+        <ion-icon ios="cart-outline" md="cart-sharp" style="font-size: 60px;" class="icon-5x"></ion-icon>
+        <br> {{ 'CART_EMPTY' | translate }}
+      </div>
+    </div>
+  }
+  @if(this._cp.items.length != 0 || this._cp.pendiente_pago.length != 0 || this._cp.ordenes_vencidas.length != 0 || this._cp.cuotas_pendientes.length === 0) {
+   <!--  <ion-card color="warning" class="ion-text-center">
 
+    </ion-card> -->
+
+    <!-- EVENTOS PENDIENTES DE PAGO -->
+    @if(this._cp.items.length != 0) {
+      <ion-list>
+        <ion-list-header>
+          <ion-label><strong>{{ 'PENDING_PAYMENT' | translate }}</strong></ion-label>
+        </ion-list-header>
+        @for(item of this._cp.items; track item.Evento) {
+          <ion-item class="ion-text-wrap">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="8">
+                  <p>{{ item.Tituloevento }}</p>
+                </ion-col>
+                <ion-col size="4">
+                  <p><strong>{{ item.Total | currency:'GTQ': 'symbol-narrow':'0.2-2':'en-US'}}</strong></p>
+                  @if(item.Descuento != 0) {
+                    <p style="font-size: 10px; color: cadetblue;"><strong>Descuento {{ item.Desc_Coddescuento }} de {{ item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US' }} aplicado</strong>
+                      <ion-icon ios="checkmark-circle-outline" md="checkmark-circle-sharp"></ion-icon>
+                    </p>
+                  }
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="9">
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button fill="clear" expand="block" color="danger" (click)="eliminarCarrito(item,1)">
+                    <ion-icon ios="trash-outline" md="trash-sharp" slot="start"></ion-icon>
+                    {{ 'REMOVE_EVENT1' | translate }} 
+                    <br>{{ 'REMOVE_EVENT2' | translate }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-button fill="outline" expand="block" class="discountButton" (click)="showPrompt(item)">
+                    <ion-icon ios="pricetag-outline" md="pricetag-sharp" slot="start"></ion-icon>
+                    {{ 'DISCOUNT_CODE1' | translate }} 
+                    <br>{{ 'DISCOUNT_CODE2' | translate }}
+                  </ion-button>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button fill="outline" expand="block" color="events" (click)="presentPopover($event,item)">
+                    <ion-icon ios="card-outline" md="card-sharp" slot="start"></ion-icon>
+                    {{ 'PROCEED_PAY1' | translate }} 
+                    <br>{{ 'PROCEED_PAY2' | translate }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        }
+      </ion-list>
+      @if(this._cp.items.length != 0){
+        <ion-grid>
+          <ion-row>
+              <ion-col size="8">
+                  <h5>
+                      <strong>{{ 'TOTAL' | translate }}:</strong>
+                  </h5>
+              </ion-col>
+              <ion-col size="4">
+                  <h5>
+                      {{ this._cp.total_carrito | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US' }}
+                  </h5>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+      }
+    }
+
+    <!-- EVENTOS CON CUOTA PENDIENTE DE PAGO -->
+    @if(this._cp.cuotas_pendientes.length != 0){
+       <ion-list>
+         <ion-list-header class="ion-text-wrap">
+             <ion-label><strong>{{ 'FEES_PENDIG_PAYMENT' | translate }}</strong></ion-label>
+         </ion-list-header>
+         @for(item of this._cp.cuotas_pendientes; track item.Evento){
+          <ion-item class="ion-text-wrap">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="6">
+                        <p><strong>{{item.Tituloevento}}</strong></p>
+                    </ion-col>
+                    <ion-col size="6">
+                        <p style="font-size:12px">{{ 'PAID' | translate }}: <strong>{{item.Pagado | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'}}</strong></p>
+                        <p style="font-size:12px">{{ 'PENDING' | translate }}: <strong>{{item.Total | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'}}</strong></p>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6" offset-6>
+                        <!-- <button ion-button outline block icon-start color="cart" (click)="pendientePago(item)"> -->
+                        <ion-button fill="outline" expand="block" color="events">
+                            <ion-icon ios="card-outline" md="card-sharp" slot="start"></ion-icon>
+                            {{ 'PROCEED_PAY1' | translate }} 
+                            <br>{{ 'PROCEED_PAY2' | translate }}
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+          </ion-item>
+         }
+      </ion-list>
+    }
+
+    <!-- EVENTOS CON ORDEN PENDIENTE DE PAGO -->
+    @if(this._cp.pendiente_pago.length != 0){
+      <ion-list>
+        <ion-list-header class="ion-text-wrap">
+            <ion-label><strong>{{ 'ORDER_PENDING_PAYMENT' | translate }}</strong></ion-label>
+        </ion-list-header>
+        @for(item of this._cp.pendiente_pago; track item.Evento){
+          <ion-item class="ion-text-wrap">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="8">
+                        <p>{{item.Tituloevento}} - {{item.Total | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'}}</p>
+                    </ion-col>
+                    <ion-col size="4">
+                        <p>{{ 'ORDER_NO' | translate }}:</p>
+                        <p><strong>{{item.Ordendepago}}</strong></p>
+                        @if(item.Descuento != 0){
+                          <p style="font-size: 10px; color: cadetblue;"><strong>Descuento {{ item.Desc_Coddescuento }} de {{item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'}} aplicado</strong>
+                              <ion-icon ios="checkmark-circle-outline" md="checkmark-circle-sharp" slot="start"></ion-icon>
+                          </p>
+                        }
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="9">
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-button fill="clear" expand="block" color="danger" (click)="eliminarCarrito(item,2)">
+                      <ion-icon ios="trash-outline" md="trash-sharp" slot="start"></ion-icon>
+                      {{ 'REMOVE_EVENT1' | translate }} 
+                      <br>{{ 'REMOVE_EVENT2' | translate }}
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6">
+                        <!-- <ion-button fill="outline" expand="block" class="discountButton" (click)="this.mostrarOrden(item)"> -->
+                        <ion-button fill="outline" expand="block" class="discountButton">
+                            <ion-icon ios="document-outline" md="document-sharp" slot="start"></ion-icon>
+                            {{ 'SEE_PAYMENT_ORDER1' | translate }} 
+                            <br>{{ 'SEE_PAYMENT_ORDER2' | translate }}
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size="6">
+                        <!-- <ion-button fill="outline" expand="block" color="events" (click)="rehacerAsig(item)"> -->
+                        <ion-button fill="outline" expand="block" color="events">
+                            <ion-icon ios="refresh-outline" md="refresh-sharp" slot="start"></ion-icon>
+                            <div class="ion-text-wrap" style="font-size: 12px">{{ 'REGENERATE_PAYMENT_ORDER' | translate }}</div>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    <!-- EVENTOS CON ORDEN DE PAGO VENCIDA -->
+    @if(this._cp.ordenes_vencidas.length != 0){
+      <ion-list>
+        <ion-list-header class="ion-text-wrap">
+            <ion-label><strong>{{ 'EXPIRED_PAYMENT_ORDER' | translate }}</strong></ion-label>
+        </ion-list-header>
+        @for(item of this._cp.ordenes_vencidas; track item.Evento){
+          <ion-item class="ion-text-wrap">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="8">
+                        <p><strong>{{item.Tituloevento}} - {{item.Total | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US' }}</strong></p>
+                    </ion-col>
+                    <ion-col size="4">
+                        <p>{{ 'ORDER_NO' | translate }}:</p>
+                        <p><strong>{{item.Ordendepago}}</strong></p>
+                        <p *ngIf="item.Descuento != 0" style="font-size: 10px; color: cadetblue;"><strong>{{ 'DISCOUNT_OF' | translate }} {{item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US' }} {{ 'APPLIED' | translate }}</strong>
+                            <ion-icon name="ios-checkmark-circle-outline"></ion-icon>
+                        </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="9">
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-button fill="clear" expand="block" color="danger" (click)="eliminarCarrito(item,3)">
+                      <ion-icon ios="trash-outline" md="trash-sharp" slot="start"></ion-icon>
+                      {{ 'REMOVE_EVENT1' | translate }} 
+                      <br>{{ 'REMOVE_EVENT2' | translate }}
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6" offset-6>
+                        <!-- <ion-button fill="outline" expand="block" color="events" (click)="rehacerAsig(item)"> -->
+                        <ion-button fill="outline" expand="block" color="events">
+                            <ion-icon ios="refresh-outline" md="refresh-sharp" slot="start"></ion-icon>
+                            <div class="ion-text-wrap" style="font-size: 12px">{{ 'GENERATE_PAYMENT_ORDER' | translate }}</div>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+          </ion-item>
+        }
+      </ion-list>
+    }
+  }
+
+  @if(this._cp.items.length != 0){
+    <ion-card class="info" style="margin:20px; width: auto;">
+      <ion-card-content style="font-size:15px">
+          <ion-icon ios="information-circle-outline" md="information-circle-sharp" slot="start"></ion-icon> 
+          <strong>{{ 'INFORMATION' | translate }}</strong> {{ 'ONLY_ONE_PAYMENT' | translate }}
+      </ion-card-content>
+    </ion-card>
+  }
 </ion-content>

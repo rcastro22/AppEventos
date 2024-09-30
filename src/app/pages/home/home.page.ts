@@ -29,14 +29,13 @@ export class HomePage implements OnInit {
     public translateService:TranslateService,
     private loadingCtrl:LoadingController,
     private modalCtrl: ModalController,
-    private storage:Storage
   ) {
     addIcons({
       "diploma-outline": "assets/icon/mdi--diploma-outline.svg",
       "diploma-sharp": "assets/icon/mdi--diploma.svg",      
     })
     //this.translateService.setDefaultLang('es');
-    //this.translateService.use('en');
+    //this.translateService.use('es');
    }
 
   async ngOnInit() {
@@ -48,7 +47,7 @@ export class HomePage implements OnInit {
     console.log("GetEvents");
     
 
-    await this._up.verifica_login2();
+    await this._up.verifica_login2().catch(()=>this._up.cerrar_sesion());
     console.log(this._up.logueado);
     
     this.cargar_eventos().then(()=>{
@@ -73,10 +72,10 @@ export class HomePage implements OnInit {
     this.loading = await this.loadingCtrl.create({
       spinner: "bubbles",
       message: msg,
-      translucent: true,
-      showBackdrop: false,
-      mode: "ios",
-      animated: true
+      //translucent: true,
+      //showBackdrop: false,
+      //mode: "ios",
+      //animated: true
     });
     await this.loading.present();
   }

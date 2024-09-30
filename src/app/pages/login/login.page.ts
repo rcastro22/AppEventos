@@ -20,13 +20,11 @@ export class LoginPage implements OnInit {
   }
 
   async signInWithGoogle(){
-    if(await this._up.loginGoogle()){
-      this.modalCtrl.dismiss(false);
-    }
+    this.modalCtrl.dismiss(await this._up.loginGoogle());
   }
 
   close_page() {
-    return this.modalCtrl.dismiss(false);
+    return this.modalCtrl.dismiss(null);
   }
 
 }

@@ -79,11 +79,9 @@ export class UsuarioService {
   }
 
   async valida_login(presentingElement:any, isRouting:boolean = false) {
-    console.log('valida login');
-    if(this.logueado){
-      this.navCtrl.navigateRoot('tabs');
-      console.log('logueado');
-    } else {
+    if(!this.logueado){
+    //  this.navCtrl.navigateRoot('tabs');
+    //} else {
       let modal: any;
       modal = await this.modalCtrl.create({
         component: LoginPage,
@@ -100,25 +98,14 @@ export class UsuarioService {
       const { data, role } = await modal.onWillDismiss();
 
       console.log(data);
-      console.log(role);
-      
-      
+      //console.log(role);
 
-      /*modal.onDidDismiss(async (retorno: boolean) => {
-        console.log("Cerro");
-        console.log(this.logueado);
-        console.log(retorno);
-        if(!this.logueado && retorno) {
-          let modalReg: any;
-          modalReg = await this.modalCtrl.create({
-            component: RegistroPage,
-            });
-            await modalReg.present();
-            }
-            if(this.logueado && !isRouting) {
-              this.navCtrl.navigateRoot('tabs/tabTodos');
-              }
-              });*/
+      if(data == null){
+        this.navCtrl.navigateRoot("tabs/tabTodos");
+      }
+
+      //if(data == false){} // ir a pagina de registro
+      
     }
     
   }

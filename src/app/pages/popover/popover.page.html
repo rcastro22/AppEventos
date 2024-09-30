@@ -1,0 +1,11 @@
+<ion-list radio-group class="popover-page">
+  <ion-item-divider color="dark">{{ 'METHOD_PAYMENT' | translate }}</ion-item-divider>
+  <ion-item (click)="closePopover(-1)">
+    <ion-icon ios="cash-outline" md="cash-sharp" slot="start"></ion-icon> {{ 'FULL_PAYMENT' | translate }}
+  </ion-item>
+  @for(item of this._cp.detalle_cuotas; track item){
+    <ion-item (click)="closePopover(item)">
+      <ion-icon ios="calendar-outline" md="calendar-sharp" slot="start"></ion-icon> {{item.Cantcuota}} {{ 'INSTALLMENTS' | translate }}
+    </ion-item>
+  }
+</ion-list>
