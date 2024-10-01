@@ -37,7 +37,7 @@
                 <ion-col size="4">
                   <p><strong>{{ item.Total | currency:'GTQ': 'symbol-narrow':'0.2-2':'en-US'}}</strong></p>
                   @if(item.Descuento != 0) {
-                    <p style="font-size: 10px; color: cadetblue;"><strong>Descuento {{ item.Desc_Coddescuento }} de {{ item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US' }} aplicado</strong>
+                    <p style="font-size: 10px; color: cadetblue;"><strong>{{ "DISCOUNT_OF_PARAM" | translate:{value:item.Desc_Coddescuento,value2:item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'} }} </strong>
                       <ion-icon ios="checkmark-circle-outline" md="checkmark-circle-sharp"></ion-icon>
                     </p>
                   }
@@ -143,7 +143,7 @@
                         <p>{{ 'ORDER_NO' | translate }}:</p>
                         <p><strong>{{item.Ordendepago}}</strong></p>
                         @if(item.Descuento != 0){
-                          <p style="font-size: 10px; color: cadetblue;"><strong>Descuento {{ item.Desc_Coddescuento }} de {{item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'}} aplicado</strong>
+                          <p style="font-size: 10px; color: cadetblue;"><strong>{{ "DISCOUNT_OF_PARAM" | translate:{value:item.Desc_Coddescuento,value2:item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'} }}</strong>
                               <ion-icon ios="checkmark-circle-outline" md="checkmark-circle-sharp" slot="start"></ion-icon>
                           </p>
                         }
@@ -199,7 +199,7 @@
                     <ion-col size="4">
                         <p>{{ 'ORDER_NO' | translate }}:</p>
                         <p><strong>{{item.Ordendepago}}</strong></p>
-                        <p *ngIf="item.Descuento != 0" style="font-size: 10px; color: cadetblue;"><strong>{{ 'DISCOUNT_OF' | translate }} {{item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US' }} {{ 'APPLIED' | translate }}</strong>
+                        <p *ngIf="item.Descuento != 0" style="font-size: 10px; color: cadetblue;"><strong>{{ "DISCOUNT_OF_PARAM" | translate:{value:item.Desc_Coddescuento,value2:item.Descuento | currency:'GTQ':'symbol-narrow':'0.2-2':'en-US'} }}</strong>
                             <ion-icon name="ios-checkmark-circle-outline"></ion-icon>
                         </p>
                     </ion-col>

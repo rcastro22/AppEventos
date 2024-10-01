@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PagoPageRoutingModule } from './pago-routing.module';
 
 import { PagoPage } from './pago.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PagoPageRoutingModule
+    PagoPageRoutingModule,
+    TranslateModule.forChild({extend:true}),
   ],
   declarations: [PagoPage]
 })

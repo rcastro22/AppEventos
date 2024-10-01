@@ -97,6 +97,7 @@
     "SEE_PAYMENT_ORDER2": "de pago",
     "REGENERATE_PAYMENT_ORDER": "Volver a generar orden de pago",
     "DISCOUNT_OF": "Descuento de",
+    "DISCOUNT_OF_PARAM": "Descuento {{value}} de {{value2}} aplicado",
     "APPLIED": "aplicado",
     "GENERATE_PAYMENT_ORDER": "Generar orden de pago",
     "INFORMATION": "Información!",

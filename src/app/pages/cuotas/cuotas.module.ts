@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { CuotasPageRoutingModule } from './cuotas-routing.module';
 
 import { CuotasPage } from './cuotas.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CuotasPageRoutingModule
+    CuotasPageRoutingModule,
+    TranslateModule.forChild({extend:true}),
   ],
   declarations: [CuotasPage]
 })

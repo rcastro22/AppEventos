@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
 import { CuotasPage } from '../cuotas/cuotas.page';
 import { PagoPage } from '../pago/pago.page';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-popover',
@@ -17,7 +17,8 @@ export class PopoverPage implements OnInit {
 
   constructor(
     public _cp:CarritoService,
-    private loadingCtrl:LoadingController
+    private loadingCtrl:LoadingController,
+    private popoverCtrl: PopoverController
   ) { 
     this.showLoader("");
     this._cp.cargar_cuotas(this._cp.eventoIdCuotas)
@@ -47,7 +48,7 @@ export class PopoverPage implements OnInit {
   }
 
   closePopover(item?:any){
-    //this.viewCtrl.dismiss(item);
+    this.popoverCtrl.dismiss(item);
   }
 
 }

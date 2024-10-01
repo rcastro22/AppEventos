@@ -1,13 +1,31 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>pago</ion-title>
+  <ion-toolbar color="events">
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'PAYMENT' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">pago</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+        {{ 'PAY_ORDER' | translate }}
+    </ion-card-header>
+    <hr>
+    <ion-card-content>
+        <p>{{ 'PAYMENT_TEXT1' | translate }}</p>
+    </ion-card-content>
+  </ion-card>
+  <ion-card color="warning">
+      <ion-card-content>
+          <p>
+              <ion-icon ios="warning-outline" md="warning-sharp"></ion-icon>
+              <strong>{{ 'IMPORTANT' | translate }}! </strong>{{ 'PAYMENT_TEXT2' | translate }}
+          </p>
+      </ion-card-content>
+  </ion-card>
+  <ion-button color="events" expand="block" large (click)="ordenPago()">
+          {{ 'GENERATE_PAYMENT_ORDER' | translate }}
+  </ion-button>
 </ion-content>

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController, PopoverController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { lastValueFrom } from 'rxjs';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
 import { EventosService } from 'src/app/services/eventos/eventos.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PopoverPage } from '../popover/popover.page';
+import { CuotasPage } from '../cuotas/cuotas.page';
+import { PagoPage } from '../pago/pago.page';
 
 @Component({
   selector: 'app-carrito',
@@ -14,6 +16,8 @@ import { PopoverPage } from '../popover/popover.page';
 export class CarritoPage implements OnInit {
 
   loading:any;
+  cuotas = CuotasPage;
+  pago = PagoPage;
 
   constructor(
     private _up:UsuarioService,
@@ -22,7 +26,8 @@ export class CarritoPage implements OnInit {
     private loadingCtrl:LoadingController,
     private modalCtrl:ModalController,
     private alertCtrl:AlertController,
-    private popoverCtrl:PopoverController
+    private popoverCtrl:PopoverController,
+    private navCtrl:NavController
   ) { }
 
   ngOnInit() {
@@ -40,10 +45,6 @@ export class CarritoPage implements OnInit {
     this.loading = await this.loadingCtrl.create({
       spinner: "bubbles",
       message: msg,
-      //translucent: true,
-      //showBackdrop: false,
-      //mode: "ios",
-      //animated: true
     });
     await this.loading.present();
   }
@@ -101,9 +102,14 @@ export class CarritoPage implements OnInit {
     });
     (await popOv).present();
 
-    let ret = await popOv.onDidDismiss();
-
-    console.log(ret);
+    const {data, role} = await popOv.onDidDismiss();
+    
+    if(data != null && data != -1) {
+      this.navCtrl.navigateForward("cuotas",{state:{"cuotas":data}});
+    }
+    else if(Number(data) == -1) {
+      this.navCtrl.navigateForward("pago");
+    }
     
     
     /* .then(valor=>{

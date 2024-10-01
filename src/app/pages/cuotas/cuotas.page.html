@@ -1,13 +1,40 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>cuotas</ion-title>
+  <ion-toolbar color="events">
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{this.cuotas.Cantcuota}} {{ 'INSTALLMENTS' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">cuotas</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-label>{{ 'FEES_TEXT1' | translate }}</ion-label>
+  <ion-range min="1" max="{{this.cuotasMostrar}}" step="1" snaps="true" color="secondary" pin="true" ticks="true" [(ngModel)]="valorRango" (ngModelChange)="updateResults()" *ngIf="this.cuotasMostrar > 1">
+      <ion-label range-left>1</ion-label>
+      <ion-label range-right>{{this.cuotasMostrar}}</ion-label>
+  </ion-range>
+
+  @for(fecha of this.cuotas.Fechas; track fecha){
+    <ion-item>
+      <ion-grid style="font-size:10px;" item-content>
+        <ion-row class="row {{fecha.Pagada == '1' ? 'pagada' : 'nopagada'}}">
+          <ion-col size="3">{{ 'FEE' | translate }} #{{fecha.Cuota}}</ion-col>
+          <ion-col text-center size="5">{{fecha.Fecha | date:"DD MMMM YYYY"}}</ion-col>
+          <ion-col size="3">{{fecha.Montoxcuota | currency:'GTQ': 'symbol-narrow':'0.2-2':'en-US'}}</ion-col>
+          <ion-col size="1">
+            <ion-checkbox item-end checked="{{fecha.Obligatorio == '1' || fecha.Pagada == '1' ? 'true' : 'false'}}" disabled></ion-checkbox>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  }
+
 </ion-content>
+
+<ion-footer>
+  <ion-button fill="outline" expand="block" color="events" (click)="pagar()">
+    <ion-icon ios="card-outline" md="card-sharp" slot="start"></ion-icon>
+    {{ 'PROCEED_TO_PAY' | translate }}
+  </ion-button>
+</ion-footer>

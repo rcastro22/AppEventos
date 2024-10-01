@@ -88,6 +88,14 @@ const routes: Routes = [
   {
     path: 'pago',
     loadChildren: () => import('./pages/pago/pago.module').then( m => m.PagoPageModule)
+  },
+  {
+    path: 'formulario',
+    loadChildren: () => import('./pages/formulario/formulario.module').then( m => m.FormularioPageModule)
+  },
+  {
+    path: 'ver-orden',
+    loadChildren: () => import('./pages/ver-orden/ver-orden.module').then( m => m.VerOrdenPageModule)
   }
 ];
 

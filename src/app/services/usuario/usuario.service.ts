@@ -156,6 +156,7 @@ export class UsuarioService {
         if(authentication != null){
           let InfoToken = await lastValueFrom(this.info_token(authentication.accessToken));
           if(InfoToken != null){
+            console.log(InfoToken);
             this.cargar_credenciales(
               this.credenciales.nombre!,
               this.credenciales.email!,
