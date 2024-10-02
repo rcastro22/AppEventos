@@ -74,15 +74,15 @@ export class CarritoService {
       
       this.http.get(url)
       .pipe(
-        map(res=>JSON.stringify(res))
+        map(res => JSON.parse(JSON.stringify(res)))
       )
       .subscribe((data)=>{
-        let carrito = JSON.parse(data) as CarritoRoot;
+        let carrito = data;
           switch (index) {
             case 1:this.items = carrito.Carrito;this.calcular_total();break;
-            //case 2:this.pendiente_pago = carrito;break;
-            //case 3:this.ordenes_vencidas = carrito;break;
-            //case 4:this.cuotas_pendientes = carrito;break;
+            case 2:this.pendiente_pago = carrito;break;
+            case 3:this.ordenes_vencidas = carrito;break;
+            case 4:this.cuotas_pendientes = carrito;break;
           }
       },
       err => {
@@ -215,16 +215,23 @@ export class CarritoService {
   }
 
   generar_orden_pago(){
-    let url = `${this.basepath}GenerarOrden`;
+    let url = `${this.basepath}GenerarOrden?TOKEN=${this._up.credenciales.accessToken!}
+&TIPO=${this._up.credenciales.providerId!}
+&EVENTO=${this.eventoIdCuotas}
+&CUOTAS=${(this.cantcuotas > 0 ? "1" : "0")}
+&CANTCUOTA=${this.cantcuotas.toString()}
+&CUOTASPAGAR=${this.cuotaspagar.toString()}
+&MONTOCUOTA=${this.montocuotas.toString()}`;
 
-    let params = new URLSearchParams();
+    let params = {};
+    /* let params = new URLSearchParams();
     params.append("TOKEN", this._up.credenciales.accessToken!);
     params.append("TIPO", this._up.credenciales.providerId!);
     params.append("EVENTO", this.eventoIdCuotas);
     params.append("CUOTAS", (this.cantcuotas > 0 ? "1" : "0"));
     params.append("CANTCUOTA", this.cantcuotas.toString());
     params.append("CUOTASPAGAR", this.cuotaspagar.toString());
-    params.append("MONTOCUOTA", this.montocuotas.toString());
+    params.append("MONTOCUOTA", this.montocuotas.toString()); */
 
     return this.http.post(url,params)
     .pipe(

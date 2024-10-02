@@ -29,6 +29,9 @@
       </ion-grid>
     </ion-item>
   }
+  <ion-item>
+    {{ 'TOTAL' | translate }} {{this.cuotasPagar}} {{this.cuotasPagar > 1 ? 'cuotas' : 'cuota'}} a pagar: {{this.total_pagar | currency:'GTQ': 'symbol-narrow':'0.2-2':'en-US'}}
+  </ion-item>
 
 </ion-content>
 

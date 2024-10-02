@@ -13,8 +13,226 @@
       </ion-button> &nbsp; &nbsp;
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="profile">
+      <ion-segment-button value="GeneralInfo">
+        <ion-icon ios="list-outline" md="list-sharp"></ion-icon>
+        <ion-label>{{ 'GENERAL' | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Cuentas">
+        <ion-icon ios="person-circle-outline" md="person-circle-sharp"></ion-icon>
+        <ion-label>{{ 'ACCOUNTS' | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Foto">
+        <ion-icon ios="camera-outline" md="camera-sharp"></ion-icon>
+        <ion-label>{{ 'PHOTO' | translate }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  @switch (profile) {
+    @case ("GeneralInfo") {
+      <ion-list>
+        <form #myForm="ngForm" (ngSubmit)="this.actualizar_cuenta()" novalidate>
+          <ion-item-group>
+              <ion-item-divider ><ion-label>{{ 'GENERAL_DATA' | translate }}</ion-label></ion-item-divider>
+              <ion-item>
+                  <ion-input [label]="'ID' | translate" label-placement="floating" type="text" required disabled [(ngModel)]="regUser.carne" name="carne"></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-input [label]="'NAME' | translate" label-placement="floating" type="text" required disabled [(ngModel)]="regUser.nombres" name="nombres"></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-input [label]="'LAST_NAME' | translate" label-placement="floating" type="text" required disabled [(ngModel)]="regUser.apellidos" name="apellidos"></ion-input>
+              </ion-item>
 
+              <ion-item>
+                  <ion-select [label]="'TYPE_DOCUMENT' | translate" label-placement="floating" (ngModelChange)="cambia_label($event)" [(ngModel)]="this.regUser.tipoDoc" submitText="Aceptar" cancelText="Cancelar" name="tipodocumento">
+                    @for (doc of this.tipodocumento; track $index) {
+                      <ion-select-option value="{{doc.iddoc}}" aria-selected="true">{{doc.documento}}</ion-select-option>
+                    }  
+                  </ion-select>
+              </ion-item>
+              <ion-item *ngIf="this.regUser.tipoDoc == '2'">
+                  <ion-select [label]="'DOCUMENT_COUNTRY' | translate" label-placement="floating" [(ngModel)]="regUser.paisDoc" submitText="Aceptar" cancelText="Cancelar" name="nacionalidad">
+                    @for (pais of this._pp.paises; track $index) {
+                      <ion-select-option value="{{pais.Pais}}" aria-selected="true">{{pais.Nacionalidad}}</ion-select-option>
+                    }
+                  </ion-select>
+              </ion-item>
+              <ion-item *ngIf="this.regUser.tipoDoc == '1'">
+                  <ion-select [label]="'DOCUMENT_COUNTRY' | translate" label-placement="floating" [(ngModel)]="regUser.paisDoc" submitText="Aceptar" cancelText="Cancelar" name="nacionalidadCent">
+                    @for (pais of this._pp.paisescentroamerica; track $index) {
+                      <ion-select-option value="{{pais.Pais}}" aria-selected="true">{{pais.Nacionalidad}}</ion-select-option>
+                    }
+                  </ion-select>
+              </ion-item>
+              <ion-item *ngIf="this.regUser.tipoDoc == '1' || this.regUser.tipoDoc == '2'">
+                  <ion-input [label]="labelDocumento" label-placement="floating" type="text" [(ngModel)]="regUser.documento" name="documento"></ion-input>
+              </ion-item>
+
+
+              <ion-item>
+                  <ion-input [label]="'PHONE' | translate" label-placement="floating" type="number" required [(ngModel)]="regUser.telefono" name="telefono"></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-label floating>{{ 'BIRTHDATE' | translate }}</ion-label>
+                  <!-- <ion-datetime displayFormat="DD MM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="regUser.nacimiento" ></ion-datetime> -->
+                  <ion-datetime-button datetime="nacimiento" ></ion-datetime-button>
+                  <ion-modal [keepContentsMounted]="true">
+                    <ng-template>
+                      <ion-datetime id="nacimiento" presentation="date"  [(ngModel)]="regUser.nacimiento" name="nacimiento" [formatOptions]="{
+                        date: {
+                          year: 'numeric',
+                          month: 'long',
+                          day: '2-digit',
+                        }
+                      }"></ion-datetime>
+                    </ng-template>
+                  </ion-modal>
+              </ion-item>
+              <ion-item>
+                  <ion-select [label]="'CITIZENSHIP' | translate" label-placement="floating" [(ngModel)]="regUser.nacionalidad" submitText="Aceptar" cancelText="Cancelar" name="nacionalidad">
+                    @for (pais of this._pp.paises; track $index) {
+                      <ion-select-option value="{{pais.Pais}}" aria-selected="true">{{pais.Nacionalidad}}</ion-select-option>
+                    }
+                  </ion-select>
+              </ion-item>
+              <ion-item>
+                  <ion-label>{{ 'SHARE_DATA' | translate }}</ion-label>
+                  <ion-toggle checked="false" [(ngModel)]="regUser.comparteDatos" name="compartirdatos"></ion-toggle>
+              </ion-item>
+              <ion-card color="warning" *ngIf="regUser.comparteDatos">
+                  <ion-card-content style="font-size:8px">
+                      <ion-icon ios="warning-outline" md="warning-sharp"></ion-icon> <strong>{{ 'IMPORTANT' | translate }}!</strong> {{ 'PROFILE_TEXT1' | translate }}
+                  </ion-card-content>
+              </ion-card>
+          </ion-item-group>
+
+          <ion-item-group>
+              <ion-item-divider ><ion-label>{{ 'EMPLOYMENT_DATA' | translate }}</ion-label></ion-item-divider>
+              <ion-item>
+                  <ion-input [label]="'WORKPLACE' | translate" label-placement="floating" type="text" [(ngModel)]="regUser.lugarTrabajo" name="trabajo"></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-input [label]="'JOB' | translate" label-placement="floating" type="text" [(ngModel)]="regUser.puesto" name="puesto"></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-input [label]="'WORK_PHONE' | translate" label-placement="floating" type="number" [(ngModel)]="regUser.telefonoTrabajo" name="telefonotrabajo"></ion-input>
+                  <!-- pattern="\d*" -->
+              </ion-item>
+          </ion-item-group>
+
+          <ion-button expand="block" color="events" type="submit" [disabled]="!myForm.form.valid">      
+            <ion-icon ios="save-outline" md="save-sharp" slot="start"></ion-icon>                  
+            {{ 'SAVE' | translate }}
+          </ion-button>
+
+        </form>
+      </ion-list>
+    }
+    @case ("Cuentas") {
+      <ion-list>
+        <!-- ESTUDIANTE -->
+        <ion-card>
+          <ion-card-header>
+              {{ 'STUDENT' | translate }}
+          </ion-card-header>
+          <ion-card-content *ngIf="this._up.perfilEstudiante == null">
+              <ion-list>
+                  <ion-item>
+                      <ion-label stacked>{{ 'ID' | translate }}</ion-label>
+                      <ion-input type="text" [(ngModel)]="estPerfil.codigo" name="estcodigo" placeholder="Ingrese carné"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                      <ion-label stacked>{{ 'BIRTHDATE' | translate }}</ion-label>
+                      <ion-datetime displayFormat="DD MM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="estPerfil.fechanac" name="estfechanac" [disabled]="estPerfil.fechanac"></ion-datetime>
+                  </ion-item>
+              </ion-list>
+              <button ion-button round small color="cart" [disabled]="!estPerfil.codigo || !estPerfil.fechanac" (click)="this._pp.asociar_cuentas(1,estPerfil)">
+                  {{ 'LINK_ACCOUNT' | translate }}
+              </button>
+          </ion-card-content>
+          <ion-row *ngIf="this._up.perfilEstudiante != null">
+              <ion-col size="2" style="background-color: #8eaa83; padding: 15px;">
+                  <ion-icon name="checkbox-outline" item-left style="font-size:30px"></ion-icon>
+              </ion-col>
+              <ion-col size="10" style="background-color: #bcdab0; padding: 15px;">
+                  {{ 'LINKED_STUDENT_ACCOUNT' | translate }}, <br> {{ 'ID' | translate }}: <strong>{{this._pp.perfilEstudiante.Carnet}}</strong>
+              </ion-col>
+          </ion-row>
+      </ion-card>
+
+      <!-- DOCENTE -->
+      <ion-card>
+          <ion-card-header>
+              {{ 'TEACHER' | translate }}
+          </ion-card-header>
+          <ion-card-content *ngIf="this._up.perfilDocente == null">
+              <ion-list>
+                  <ion-item>
+                      <ion-label stacked>{{ 'TEACHER_CODE' | translate }}</ion-label>
+                      <ion-input type="text" [(ngModel)]="docPerfil.codigo" name="doccodigo" placeholder="Ingrese código"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                      <ion-label stacked>{{ 'BIRTHDATE' | translate }}</ion-label>
+                      <ion-datetime displayFormat="DD MM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="docPerfil.fechanac" name="docfechanac" [disabled]="docPerfil.fechanac"></ion-datetime>
+                  </ion-item>
+              </ion-list>
+              <button ion-button round small color="cart" [disabled]="!docPerfil.codigo || !docPerfil.fechanac" (click)="this._pp.asociar_cuentas(2,docPerfil)">
+                  {{ 'LINK_ACCOUNT' | translate }}
+              </button>
+          </ion-card-content>
+          <ion-row *ngIf="this._up.perfilDocente != null">
+              <ion-col size="2" style="background-color: #8eaa83; padding: 15px;">
+                  <ion-icon name="checkbox-outline" item-left style="font-size:30px"></ion-icon>
+              </ion-col>
+              <ion-col size="10" style="background-color: #bcdab0; padding: 15px;">
+                  {{ 'LINKED_TEACHER_ACCOUNT' | translate }}, <br> {{ 'TEACHER_CODE' | translate }}: <strong>{{this._pp.perfilDocente.Codpers}}</strong>
+              </ion-col>
+          </ion-row>
+      </ion-card>
+
+      <!-- ADMINISTRATIVO -->
+      <ion-card>
+          <ion-card-header>
+              {{ 'ADMINISTRATIVE' | translate }}
+          </ion-card-header>
+          <ion-card-content *ngIf="this._up.perfilAdministrativo == null">
+              <ion-list>
+                  <ion-item>
+                      <ion-label stacked>{{ 'STAFF_CODE' | translate }}</ion-label>
+                      <ion-input type="text" [(ngModel)]="admPerfil.codigo" name="admcodigo" placeholder="Ingrese código"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                      <ion-label stacked>{{ 'BIRTHDATE' | translate }}</ion-label>
+                      <ion-datetime displayFormat="DD MM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="admPerfil.fechanac" name="admfechanac" [disabled]="admPerfil.fechanac"></ion-datetime>
+                  </ion-item>
+              </ion-list>
+              <button ion-button round small color="cart" [disabled]="!admPerfil.codigo || !admPerfil.fechanac" (click)="this._pp.asociar_cuentas(3,admPerfil)">
+                  {{ 'LINK_ACCOUNT' | translate }}
+              </button>
+          </ion-card-content>
+          <ion-row *ngIf="this._up.perfilAdministrativo != null">
+              <ion-col size="2" style="background-color: #8eaa83; padding: 15px;">
+                  <ion-icon name="checkbox-outline" item-left style="font-size:30px"></ion-icon>
+              </ion-col>
+              <ion-col size="10" style="background-color: #bcdab0; padding: 15px;">
+                  {{ 'LINKED_ADMINISTRATIVE_ACCOUNT' | translate }}, <br> {{ 'STAFF_CODE' | translate }}: <strong>{{this._pp.perfilAdministrativo.Codpers}}</strong>
+              </ion-col>
+          </ion-row>
+      </ion-card>
+      </ion-list>
+    }
+    @case ("Foto") {
+      <ion-list class="image">
+        <ion-item class="ion-text-center">
+          <img [src]="this._up.credenciales.photoURL">
+        </ion-item>
+      </ion-list>
+    }
+  }
 </ion-content>
