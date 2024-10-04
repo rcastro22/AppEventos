@@ -13,8 +13,6 @@ export class VerOrdenPage implements OnInit {
 
   basepath = url_services
   orden:any = [];
-  /* pdfSrc:string = "https://betaeventos.galileo.edu/api/verOrdenPago?TOKEN=ya29.a0AcM612xFBE1iYlnX1Bk2PyT_-H9BvMWUZNrrTq9LOb_8OTOEPduOmM8E4wh7Ye8_M6vVnKjAepRdZ9OxKohFy6FclpBhh3BmvqCCWPCT9X4lL5bsN1buh_kVjPTgsgvIDdYEHHqwUBc2DOK-L7MIymaJxZbbGHHz72saCgYKAVwSARMSFQHGX2Mi6tlWLNXYSYyAHnYSKkZxNA0170&TIPO=google&ORDENDEPAGO=382502322"; */
-  /* pdfSrc:string = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf"; */
   pdfSrc:string = "";
 
   constructor(
