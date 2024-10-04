@@ -162,6 +162,19 @@ export class EventosService {
     return respuesta;
   }
 
+  por_Categoria(_categoriaId:string){
+    let eventCategoria:any = [];
+
+    this.eventos.forEach(eventos => {
+      if(eventos.Categoria == _categoriaId){
+        eventCategoria.push(eventos);
+      }
+    });
+
+    return eventCategoria;
+
+  }
+
   defaultDiacriticsRemovalMap = [
     { 'base': 'A', 'letters': /[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g },
     { 'base': 'E', 'letters': /[\u0045\u24BA\uFF25\u00C8\u00C9\u00CA\u1EC0\u1EBE\u1EC4\u1EC2\u1EBC\u0112\u1E14\u1E16\u0114\u0116\u00CB\u1EBA\u011A\u0204\u0206\u1EB8\u1EC6\u0228\u1E1C\u0118\u1E18\u1E1A\u0190\u018E]/g },

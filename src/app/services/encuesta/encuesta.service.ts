@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UsuarioService } from '../usuario/usuario.service';
 import { HttpClient } from '@angular/common/http';
 import { url_services, url_services_proxy } from 'src/app/config/url.services';
-import { catchError, map } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export class EncuestaService {
         /* if(error._body == "\"Usuario no encontrado\"" && this._up.logueado){
           this._up.cerrar_sesion();
         } */
-        return error;
+        return of(error);
       })
     )
 

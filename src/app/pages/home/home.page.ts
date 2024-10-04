@@ -20,6 +20,7 @@ export class HomePage implements OnInit {
   component = EventoPage;
   loading:any;
   eventoBuscar:any[] = [];
+  categoria:string = "Todos";
 
   constructor(
     public _ep:EventosService,
@@ -70,8 +71,10 @@ export class HomePage implements OnInit {
 
   async showLoader(msg:string){
     this.loading = await this.loadingCtrl.create({
-      spinner: "bubbles",
-      message: msg,
+      //spinner: "bubbles",
+      spinner: null,
+      //message: msg,
+      cssClass: 'custom-loading',
       //translucent: true,
       //showBackdrop: false,
       //mode: "ios",
@@ -155,6 +158,15 @@ export class HomePage implements OnInit {
 
     (await alert).present();
    
+  }
+
+  changeCategory(category:any) {
+    if(category == "0") {
+      this.eventoBuscar = this._ep.eventos;
+    }
+    else {
+      this.eventoBuscar = this._ep.por_Categoria(category);
+    }
   }
 
 }

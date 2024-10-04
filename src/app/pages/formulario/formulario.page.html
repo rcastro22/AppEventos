@@ -1,13 +1,100 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>formulario</ion-title>
+    <ion-title>{{ 'FORM' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">formulario</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-grid>
+    <ion-card color="warning" style="margin:0px; padding: 5px; width: auto;">
+      <strong style="color:red; font-size: 18px"> * </strong>{{ 'REQUIRED' | translate }}
+    </ion-card>
+    <ion-list lines="none">
+      @for (pregunta of this._enp.encuesta.Formularios[0].PreguntasFormulario; track $index; let idx = $index) {
+        <!-- <ion-row> -->
+          <ion-item class="ion-text-wrap">
+            <hr>
+            <ion-label><strong> {{pregunta.Descripcion}}</strong> <strong style="color:red" *ngIf="pregunta.Obligatorio == 1">*</strong></ion-label>
+          </ion-item>
+
+          <!-- Texto : Formato respuesta = null -->
+          @if(this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == null) {
+            <ion-item>
+              <ion-input type="text" [(ngModel)]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Respuesta" maxlength="{{pregunta.Maximo}}" placeholder="{{pregunta.Descripcion_Tipo}}"></ion-input>
+            </ion-item>
+          }
+
+          <!-- Numerico - Input : Formato respuesta = 1 -->
+          @if (this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 1) {
+            <ion-item style="padding-left: 30px">
+              <ion-input type="number" [(ngModel)]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Respuesta" pattern="\d*" min="{{pregunta.Minimo}}" max="{{pregunta.Maximo}}" step="1" maxlength="2" placeholder="{{pregunta.Minimo}}-{{pregunta.Maximo}}" 
+                
+                >
+              </ion-input>
+              <!-- (ionChange)="this.value=validaNum($event,idx)"
+                oninput="this.value=(this.value>10 ? 10: this.value)" onblur="this.value=(this.value>10 ? 10: this.value)" onfocus="this.value=(this.value>10 ? 10: this.value)" -->
+            </ion-item>
+          }
+
+          <!-- Numerico - Slider : Formato respuesta = 2 -->
+          @if (this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 2) {
+            <ion-item *ngIf="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 2">
+              <ion-range [(ngModel)]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Respuesta" min="{{this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Minimo}}" max="{{this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Maximo}}" pin="true"
+                snaps="true" step="1">
+                <ion-label range-left>{{this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Minimo}}</ion-label>
+                <ion-label range-right>{{this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Maximo}}</ion-label>
+              </ion-range>
+            </ion-item>
+          }
+
+          <!-- Numerico - Rating : Formato respuesta = 3 -->
+          @if (this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 3) {
+            <app-ion-rating [(ngModel)]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Respuesta" [numStars]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Maximo"
+              style="padding-left: 20px"></app-ion-rating>
+          }
+
+          <!-- Opcion Multiple : Formato respuesta = 4 ó 5 u 8-->
+          @if (this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 4 || this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 5 || this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 8) {
+            <ion-item *ngIf="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 4 || this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 5 || this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 8">
+              <ion-select [(ngModel)]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Respuesta" submitText="Aceptar" cancelText="Cancelar" style="max-width:100%">
+                @for (resp of this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Opciones; track $index) {
+                  <ion-select-option value="{{resp.Respuesta}}" aria-selected="true">{{resp.Descripcion_Respuesta}}</ion-select-option>
+                }
+              </ion-select>
+            </ion-item>
+          }
+
+          <!-- Respuesta Multiple : Formato respuesta = 6 ó 7 -->
+          @if (this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 6 || this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Formato_Respuesta == 7) {
+            <ion-grid class="ion-padding">
+              <ion-row item-content>
+                <ion-col size="12" *ngFor="let opc of pregunta.Opciones; let idxopc = index">
+                  <ion-checkbox [(ngModel)]="this._enp.encuesta.Formularios[0].PreguntasFormulario[idx].Opciones[idxopc].checked"></ion-checkbox>
+                  <ion-label>{{opc.Descripcion_Respuesta}}</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          }
+
+          <hr>
+        <!-- </ion-row> -->
+      }
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" size="small" color="dark" (click)="cancelar()">
+            <ion-icon ios="close-circle-outline" md="close-circle-sharp" slot="start"></ion-icon>
+            {{ 'CANCEL' | translate }}
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" size="small" color="events" (click)="enviarForm()">
+            <ion-icon ios="save-outline" md="save-sharp" slot="start"></ion-icon>
+            {{ 'SEND' | translate }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+    </ion-list>
+  </ion-grid>
 </ion-content>

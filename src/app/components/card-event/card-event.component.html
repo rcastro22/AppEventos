@@ -1,0 +1,69 @@
+<ion-card routerDirection="forward" [routerLink]="['/evento']" [state]="{ evento:evento }">
+  @if(evento.Precio == null || evento.Precio == 0){
+    <div class="freebanner">
+      <div>{{"FREE" | translate}}</div>
+    </div>
+  }
+  <img [src]="evento.Fotoevento | imagen" class="imgDecora">
+
+  <ion-card-content>
+    <h4><strong>{{ evento.Tituloevento }}</strong></h4>
+    <ion-grid >
+      <ion-row>
+        <ion-col class="ion-text-start">{{"START"|translate}}: <strong>{{evento.Fechaini|date: 'dd/MM/YYYY'}}</strong></ion-col>
+        <ion-col class="ion-text-end">{{"END"|translate}}: <strong>{{evento.Fechafin|date: 'dd/MM/YYYY'}}</strong></ion-col>
+      </ion-row>
+      @if(evento.Finasignacion){
+        <ion-row>
+          <ion-col>
+            <ion-icon ios="calendar-outline" md="calendar-sharp"></ion-icon> {{ 'LAST_DAY_TO_GET_IT' | translate }}: <strong style="color:brown;">{{evento.Finasignacion | date: 'dd/MM/YYYY'}}</strong>
+          </ion-col>
+        </ion-row>
+      }
+      @if(evento.Ocultar_Precio != "1"){
+        <ion-row>
+          @if(evento.Precio != null && evento.Precio != 0){                  
+            <ion-col class="ion-text-start">
+              <ion-icon ios="card-outline" md="card-sharp"></ion-icon>
+              @if(evento.Monto_Descuentoautomev != null && evento.Monto_Descuentoautomev != 0){
+                <strong style="text-decoration: line-through; "> {{evento.Precio | currency:'Q':'code'}}</strong>
+              }
+              <strong style="color: rgb(0, 127, 0);"> {{evento.Precio - evento.Monto_Descuentoautomev | currency:'Q':'code'}}</strong>
+            </ion-col>
+          }
+          @if(evento.Precio == null || evento.Precio == 0){
+            <ion-col class="ion-text-start">
+              <strong color="primary">{{"FREE" | translate}}</strong>
+            </ion-col>
+          }
+          @if(evento.Desc_Descuentoautomev != null && evento.Desc_Descuentoautomev != ""){
+            <ion-col class="ion-text-end">
+              <ion-badge color="light" style="color: rgb(188, 88, 236);">
+                <ion-icon ios="pricetag-outline" md="pricetag-sharp"></ion-icon>
+                {{evento.Desc_Descuentoautomev}}
+              </ion-badge>
+            </ion-col>                
+          }
+        </ion-row>
+      }
+      <ion-row>
+        @if(evento.Pagos > 1){
+          <ion-col class="ion-text-start">
+            <ion-badge color="events">
+              <ion-icon ios="cash-outline" md="cash-sharp"></ion-icon>
+              {{"UP_TO_PAYMENTS" | translate:{value:evento.Pagos} }}
+            </ion-badge>
+          </ion-col>
+        }                
+        @if(evento.Diploma == 1){
+          <ion-col class="ion-text-end">
+            <ion-badge color="light" style="color: rgb(227, 103, 45);">
+              <ion-icon ios="diploma-outline" md="diploma-sharp"></ion-icon>
+              {{ "INCLUDES_DIPLOMA" | translate }}
+            </ion-badge>
+          </ion-col>  
+        }
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

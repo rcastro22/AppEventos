@@ -142,10 +142,14 @@ export class CarritoService {
 
   eliminar_carrito(evento:any,tipoCarrito:number){
 
-    let url = `${this.basepath}QuitarDeCarrito?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}&EVENTO=${evento.Evento}`;
-    //let url = `${this.basepath}QuitarDeCarrito`;
+    //let url = `${this.basepath}QuitarDeCarrito?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}&EVENTO=${evento.Evento}`;
+    let url = `${this.basepath}QuitarDeCarrito`;
 
-    let data = {};
+    let data = {
+      TOKEN: this._up.credenciales.accessToken!,
+      TIPO: this._up.credenciales.providerId!,
+      EVENTO: evento.Evento
+    };
     /* let data = new URLSearchParams();
     data.append("TOKEN", this._up.credenciales.accessToken!);
     data.append("TIPO", this._up.credenciales.providerId!);
@@ -190,6 +194,7 @@ export class CarritoService {
         (await this.toastCtrl.create({
           message: mensaje,
           position: 'bottom',
+          color: 'danger',
           duration: 4000,
           buttons: ["Ok"]
         })).present();
@@ -224,14 +229,6 @@ export class CarritoService {
 &MONTOCUOTA=${this.montocuotas.toString()}`;
 
     let params = {};
-    /* let params = new URLSearchParams();
-    params.append("TOKEN", this._up.credenciales.accessToken!);
-    params.append("TIPO", this._up.credenciales.providerId!);
-    params.append("EVENTO", this.eventoIdCuotas);
-    params.append("CUOTAS", (this.cantcuotas > 0 ? "1" : "0"));
-    params.append("CANTCUOTA", this.cantcuotas.toString());
-    params.append("CUOTASPAGAR", this.cuotaspagar.toString());
-    params.append("MONTOCUOTA", this.montocuotas.toString()); */
 
     return this.http.post(url,params)
     .pipe(
@@ -243,6 +240,26 @@ export class CarritoService {
         return of(error);
       })
     )
+  }
 
+  rehacer_asignacion(evento_id:any){
+    let url = `${this.basepath}RehacerAsignacion`;
+
+    let params = {
+      TOKEN: this._up.credenciales.accessToken!,
+      TIPO: this._up.credenciales.providerId!,
+      EVENTO: evento_id,
+    };
+
+    return this.http.post(url,params)
+    .pipe(
+      map(resp => JSON.parse(JSON.stringify(resp))),
+      catchError(error=>{
+        /* if(error._body == "\"Usuario no encontrado\"" && this._up.logueado){
+          this._up.cerrar_sesion();
+        } */
+        return of(error);
+      })
+    )
   }
 }

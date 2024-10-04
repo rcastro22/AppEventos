@@ -52,11 +52,12 @@ export class PerfilPage implements OnInit {
     public _up:UsuarioService,
     public _pp:PerfilService
   ) { 
-    this._pp.cargar_info_perfil();
-    this.llena_local();
+    
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this._pp.cargar_info_perfil();
+    this.llena_local();
   }
 
   llena_local(){
@@ -114,7 +115,9 @@ export class PerfilPage implements OnInit {
         
   }
 
-  actualizar_cuenta(){}
+  actualizar_cuenta(){
+    this._pp.actualiza_perfil(this.regUser);
+  }
 
 
 }

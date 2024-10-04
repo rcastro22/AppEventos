@@ -153,6 +153,7 @@ export class UsuarioService {
       if(new Date(this.credenciales.expiresIn!) < new Date()){
         console.log('token expirado');
         let authentication = await GoogleAuth.refresh();
+        console.log(authentication);
         if(authentication != null){
           let InfoToken = await lastValueFrom(this.info_token(authentication.accessToken));
           if(InfoToken != null){

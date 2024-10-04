@@ -1,6 +1,12 @@
 /* ion-toolbar {
     background-color: var(--ion-color-events);
 } */
+ion-loading.custom-loading {
+    .loading-wrapper {
+      //background: #ffffff url("./assets/imgs/clock.gif") no-repeat center;
+      background: red !important;
+    }
+  }
 
 .no-events {
     width: 100%;
@@ -14,51 +20,21 @@ ion-item {
     --padding-start: 5px;
     --inner-padding-end: 5px;
 }
-ion-card {
-    margin: 10px 20px;
-    border: 0.1px;
-    border-style: solid;
-    border-color: rgb(222, 222, 222);
+ion-list {
+    //position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(100% - 125px);
     width: 100%;
+    overflow-y: auto;
+  }
 
-    img {
-        width: 100%;
-        height: 150px;
-        object-fit:contain;
-        background-color: black;
-    }
-
-    ion-card-content ion-grid {
-        font-size: 0.9em;
-    }
-    ion-card-content ion-grid ion-row ion-col {
-        padding: 0px 0px;
-    }
-}
-
-.freebanner {
-    width: 300px;
-    height: 40px;
+app-card-event {
     display: flex;
-    background: rgba(151, 147, 21, 0.861);
-    position: absolute;
-    transform: rotate(-45deg);
-    margin-top: 45px;
-    margin-left: -85px;
-    color: white;
-
-    div {
-        font-size: 2rem;
-        display: flex;
-        justify-content: center;
-        width: 100%;
-    }
 }
 
-
-.imgDecora {
-    width: 100%;
-    height: 150px;
-    object-fit:contain;
-    background-color: black;
+.welcome {
+    margin: 10px;
+    padding: 5px 25px 5px 25px;
+    font-size: 1.6em;
 }

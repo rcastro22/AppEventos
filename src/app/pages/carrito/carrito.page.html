@@ -111,9 +111,9 @@
                     </ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-col size="6" offset-6>
-                        <!-- <button ion-button outline block icon-start color="cart" (click)="pendientePago(item)"> -->
-                        <ion-button fill="outline" expand="block" color="events">
+                    <ion-col size="6" offset="6">
+                        <ion-button ion-button outline block icon-start color="cart" (click)="pendientePago(item)">
+                        <!-- <ion-button fill="outline" expand="block" color="events"> -->
                             <ion-icon ios="card-outline" md="card-sharp" slot="start"></ion-icon>
                             {{ 'PROCEED_PAY1' | translate }} 
                             <br>{{ 'PROCEED_PAY2' | translate }}
@@ -162,16 +162,15 @@
                 </ion-row>
                 <ion-row>
                     <ion-col size="6">
-                        <!-- <ion-button fill="outline" expand="block" class="discountButton" (click)="this.mostrarOrden(item)"> -->
-                        <ion-button fill="outline" expand="block" class="discountButton">
+                        <ion-button fill="outline" expand="block" class="discountButton" (click)="this.mostrarOrden(item)">
                             <ion-icon ios="document-outline" md="document-sharp" slot="start"></ion-icon>
                             {{ 'SEE_PAYMENT_ORDER1' | translate }} 
                             <br>{{ 'SEE_PAYMENT_ORDER2' | translate }}
                         </ion-button>
                     </ion-col>
                     <ion-col size="6">
-                        <!-- <ion-button fill="outline" expand="block" color="events" (click)="rehacerAsig(item)"> -->
-                        <ion-button fill="outline" expand="block" color="events">
+                        <ion-button fill="outline" expand="block" color="events" (click)="rehacerAsig(item)">
+                        <!-- <ion-button fill="outline" expand="block" color="events"> -->
                             <ion-icon ios="refresh-outline" md="refresh-sharp" slot="start"></ion-icon>
                             <div class="ion-text-wrap" style="font-size: 12px">{{ 'REGENERATE_PAYMENT_ORDER' | translate }}</div>
                         </ion-button>
@@ -216,9 +215,9 @@
                   </ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-col size="6" offset-6>
-                        <!-- <ion-button fill="outline" expand="block" color="events" (click)="rehacerAsig(item)"> -->
-                        <ion-button fill="outline" expand="block" color="events">
+                    <ion-col size="6" offset="6">
+                        <ion-button fill="outline" expand="block" color="events" (click)="rehacerAsig(item)">
+                        <!-- <ion-button fill="outline" expand="block" color="events"> -->
                             <ion-icon ios="refresh-outline" md="refresh-sharp" slot="start"></ion-icon>
                             <div class="ion-text-wrap" style="font-size: 12px">{{ 'GENERATE_PAYMENT_ORDER' | translate }}</div>
                         </ion-button>

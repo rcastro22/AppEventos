@@ -7,6 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PopoverPage } from '../popover/popover.page';
 import { CuotasPage } from '../cuotas/cuotas.page';
 import { PagoPage } from '../pago/pago.page';
+import { VerOrdenPage } from '../ver-orden/ver-orden.page';
 
 @Component({
   selector: 'app-carrito',
@@ -61,6 +62,7 @@ export class CarritoPage implements OnInit {
     });
   }
 
+  /* Alert para Descuento */
   async showPrompt(event:any) {
     let prompt = this.alertCtrl.create({
       header: await this._up.translateSer("DISCOUNT"),
@@ -89,6 +91,7 @@ export class CarritoPage implements OnInit {
     (await prompt).present();
   }
 
+  /* Popover para pago directo o cuotas */
   async presentPopover(myEvent:MouseEvent,evento:any) {
     this._cp.detalle_cuotas = [];
     this._cp.eventoIdCuotas = evento.Evento;
@@ -110,41 +113,51 @@ export class CarritoPage implements OnInit {
     else if(Number(data) == -1) {
       this.navCtrl.navigateForward("pago");
     }
-    
-    
-    /* .then(valor=>{
-      if(valor != null && valor != -1){
-        this.navCtrl.push(this.cuotas,{'cuotas':valor})
-      }else if(valor == -1){
-        this.navCtrl.push(this.pago);
-      }
-    }); */
+  }
+
+  async rehacerAsig(evento:any){
+    await this.showLoader(await this.getTextLoading("PLEASE_WAIT"));
+
+    this._cp.rehacer_asignacion(evento["Evento"])
+    .subscribe(async data=>{
+      this.loading.dismiss();
+      (await this.alertCtrl.create({
+        header: await this._up.translateSer("PAY_ORDER"),
+        subHeader: await this._up.translateSer("PAYMENT_ORDER_GENERATED"),
+        buttons: [
+          {
+            text: await this._up.translateSer("OK"),
+            handler: data => {
+              this._cp.cargar_carrito();
+            }
+          }]
+      })).present();
+    })
+  }
+
+  async pendientePago(item:any){
+    await this.showLoader(await this.getTextLoading("PLEASE_WAIT"));
+    this._cp.eventoIdCuotas = item.Evento;
+    this._cp.cargar_cuotas(this._cp.eventoIdCuotas)
+    .subscribe(data=>{
+      this._cp.detalle_cuotas = data.cuotas;
+      this.loading.dismiss();
+
+      this._cp.detalle_cuotas.forEach(element => {
+        if(element.Cantcuota == item.Pagos){
+          /* this.navCtrl.push(this.cuotas,{'cuotas':element}); */
+          this.navCtrl.navigateForward("cuotas",{state:{"cuotas":element}});
+        }
+      });
+    })
+  }
+
+  async mostrarOrden(item:any){
+    let orden = await this.modalCtrl.create({
+      component: VerOrdenPage,
+      componentProps: {'orden':item["Ordendepago"]}
+    });
+    (await orden).present();
   }
 
 }
-
-
-
-
-
-/* @Component({
-  selector: 'app-popover',
-  template : `
-  <ion-list radio-group class="popover-page">
-    <ion-item-divider color="dark">{{ 'METHOD_PAYMENT' | translate }}</ion-item-divider>
-    <ion-button ion-item (click)="closePopover(-1)">
-            <ion-icon ios="cash-outline" md="cash-sharp" slot="start"></ion-icon> {{ 'FULL_PAYMENT' | translate }}
-        </ion-button>
-    @for(item of this._cp.detalle_cuotas; track item){
-      <ion-button (click)="closePopover(item)">
-            <ion-icon ios="calendar-outline" md="calendar-sharp"></ion-icon> {{item.Cantcuota}} {{ 'INSTALLMENTS' | translate }}
-      </ion-button>
-    }
-  </ion-list>
-  `
-})
-export class PopoverPage {
-  constructor(
-    public loadingCtrl: LoadingController
-  ){}
-} */
