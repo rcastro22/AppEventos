@@ -1,0 +1,22 @@
+<ion-content [fullscreen]="true">
+  <div class="ion-text-center">
+    <img src="./assets/imgs/download2.png" alt="">
+  </div>
+  <div class="ion-text-center" style="margin-top: 15%;">
+    <h1>{{ 'ATTENTION' | translate }}</h1>
+  </div>
+  <ul>
+    @for (prec of this._cp.precondiciones[0].Precondiciones; track $index) {
+      <div>
+        @if (prec.Cumple == false) {
+          <li>
+            <p><strong>{{prec.Descripcion}}</strong></p>
+          </li>
+        }
+      </div>
+    }
+  </ul>
+  <div class="ion-text-center">
+    <ion-button color="primary" (click)="this.modalCtrl.dismiss()">Ok</ion-button>
+  </div>
+</ion-content>

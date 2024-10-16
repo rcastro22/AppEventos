@@ -8,6 +8,7 @@ import { NetworkingPageRoutingModule } from './networking-routing.module';
 
 import { NetworkingPage } from './networking.page';
 import { TranslateModule } from '@ngx-translate/core';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
     IonicModule,
     NetworkingPageRoutingModule,
     TranslateModule.forChild({extend:true}),
+    QRCodeModule
   ],
   declarations: [NetworkingPage]
 })

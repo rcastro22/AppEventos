@@ -70,8 +70,7 @@ export class EventosService {
           map(val => error.error)
         );
       })
-    );
-      
+    );      
   }
 
   cargar_detalle(evento:any){
@@ -190,23 +189,62 @@ export class EventosService {
 
 
   removeDiacritics(str:string) {
-      if (str != null) {
-          str = str + "";
-          var changes;
-          if (!changes) {
-              changes = this.defaultDiacriticsRemovalMap;
-          }
-          for (var i = 0; i < changes.length; i++) {
-              try {
-                  str = str.replace(changes[i].letters, changes[i].base);
-              }
-              catch (err) {
-                  str = "";
-              }
-          }
-          return str;
-      } else {
-          return str;
+    if (str != null) {
+      str = str + "";
+      var changes;
+      if (!changes) {
+        changes = this.defaultDiacriticsRemovalMap;
       }
+      for (var i = 0; i < changes.length; i++) {
+        try {
+          str = str.replace(changes[i].letters, changes[i].base);
+        }
+        catch (err) {
+          str = "";
+        }
+      }
+      return str;
+    } else {
+      return str;
+    }
+  }
+
+  cargar_actividades_asignacion(eventoId:any){
+    let url = `${this.basepath}obtenerActividades?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}&EVENTO=${eventoId}`;
+    
+    return this.http.get(url)
+    .pipe(
+      map(resp => JSON.parse(JSON.stringify(resp))),
+      catchError(error=>{
+        /* if(error._body == "\"Usuario no encontrado\"" && this._up.logueado){
+          this._up.cerrar_sesion();
+        } */
+        return error;
+      })
+    );
+  }
+
+  seleccionar_actividad(actividad:any, evento:any){
+    let url = `${this.basepath}seleccionarActividades?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}&EVENTO=${actividad.Evento}&ACTIVIDAD=${actividad.Actividad}`;
+
+    let datos = {
+      TOKEN: this._up.credenciales.accessToken,
+      TIPO: this._up.credenciales.providerId,
+      EVENTO: evento,
+      ACTIVIDAD: actividad.Actividad,
+      TITULO: actividad.Titulo
+    }
+
+    return this.http.post(url,datos)
+    .pipe(
+      map(resp => JSON.parse(JSON.stringify(resp))),
+      catchError(error=>{
+        console.log(error);
+        /* if(error._body == "\"Usuario no encontrado\"" && this._up.logueado){
+          this._up.cerrar_sesion();
+        } */
+        return of(error);
+      })
+    );
   }
 }

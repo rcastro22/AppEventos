@@ -20,7 +20,7 @@
       <ion-grid style="font-size:10px;" item-content>
         <ion-row class="row {{fecha.Pagada == '1' ? 'pagada' : 'nopagada'}}">
           <ion-col size="3">{{ 'FEE' | translate }} #{{fecha.Cuota}}</ion-col>
-          <ion-col text-center size="5">{{fecha.Fecha | date:"DD MMMM YYYY"}}</ion-col>
+          <ion-col text-center size="5">{{fecha.Fecha | date:"dd MMMM YYYY"}}</ion-col>
           <ion-col size="3">{{fecha.Montoxcuota | currency:'GTQ': 'symbol-narrow':'0.2-2':'en-US'}}</ion-col>
           <ion-col size="1">
             <ion-checkbox item-end checked="{{fecha.Obligatorio == '1' || fecha.Pagada == '1' ? 'true' : 'false'}}" disabled></ion-checkbox>

@@ -42,7 +42,7 @@ export class UsuarioService {
   networking = {
     telefono: true,
     email: true,
-    trabajo: true
+    lugar_trabajo: true
   };
 
   language = "";
@@ -254,7 +254,7 @@ export class UsuarioService {
     this.perfil.pasaporte = "";
     this.perfil.fechanac = "";
     this.perfil.pas_pais = "";
-    this.perfil.lugagr_trabajo = "";
+    this.perfil.lugar_trabajo = "";
     this.perfil.puesto = "";
     this.perfil.telefono_trabajo = "";
     this.perfil.compartir = "";
@@ -262,6 +262,7 @@ export class UsuarioService {
     this.perfil.dpi_pais = "";
     this.perfil.id_galileo = "";
     this.perfil.es_menor = false;
+    this.perfil.nit = "";
   }
 
   info_token(token: string) {
@@ -370,7 +371,7 @@ export class UsuarioService {
     this.perfil.pasaporte = pasaporte;
     this.perfil.fechanac = fechanac;
     this.perfil.pas_pais = pas_pais;
-    this.perfil.lugagr_trabajo = lugagr_trabajo;
+    this.perfil.lugar_trabajo = lugagr_trabajo;
     this.perfil.puesto = puesto;
     this.perfil.telefono_trabajo = telefono_trabajo;
     this.perfil.compartir = compartir;
@@ -392,7 +393,7 @@ export class UsuarioService {
     this.perfil.pasaporte = perfil.Pasaporte;
     this.perfil.fechanac = new Date(perfil.Fechanac).toDateString();
     this.perfil.pas_pais = perfil.Pas_Pais;
-    this.perfil.lugagr_trabajo = perfil.Lugar_Trabajo;
+    this.perfil.lugar_trabajo = perfil.Lugar_Trabajo;
     this.perfil.puesto = perfil.Puesto;
     this.perfil.telefono_trabajo = perfil.Telefono_Trabajo;
     this.perfil.compartir = perfil.Compartir;
@@ -400,6 +401,7 @@ export class UsuarioService {
     this.perfil.dpi_pais = perfil.Dpi_Pais;
     this.perfil.id_galileo = perfil.Id_Galileo;
     this.perfil.es_menor = perfil.EsMenor;
+    this.perfil.nit = perfil.Nit;
   }
 
   public guardar_storage() {

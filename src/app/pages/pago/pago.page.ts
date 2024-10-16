@@ -5,6 +5,7 @@ import { EncuestaService } from 'src/app/services/encuesta/encuesta.service';
 import { FormularioPage } from '../formulario/formulario.page';
 import { VerOrdenPage } from '../ver-orden/ver-orden.page';
 import { catchError, of } from 'rxjs';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
   selector: 'app-pago',
@@ -15,9 +16,17 @@ export class PagoPage implements OnInit {
 
   loading:any;
 
+  public detailPayment = {
+    nit: "",
+    cf: true,
+    nombre: "CONSUMIDOR FINAL",
+    correo: this._up.perfil.email,
+  }
+
   constructor(
     private _enp:EncuestaService,
     private _cp:CarritoService,
+    private _up:UsuarioService,
     private modalCtrl:ModalController,
     private loadingCtrl:LoadingController,
     private alertCtrl:AlertController,
@@ -170,6 +179,17 @@ export class PagoPage implements OnInit {
     });
 
     return existe;
+  }
+
+
+  changeCF(){
+    if(this.detailPayment.cf == true){
+      this.detailPayment.nombre = "CONSUMIDOR FINAL";
+    }
+    else{
+      this.detailPayment.nit = this._up.perfil.nit;
+      this.detailPayment.nombre = this._up.perfil.nombres + " " + this._up.perfil.apellidos;
+    }
   }
 
 }

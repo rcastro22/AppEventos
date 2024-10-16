@@ -12,20 +12,49 @@
     <ion-card-header>
         {{ 'PAY_ORDER' | translate }}
     </ion-card-header>
-    <hr>
     <ion-card-content>
-        <p>{{ 'PAYMENT_TEXT1' | translate }}</p>
+      <p>{{ 'PAYMENT_TEXT1' | translate }}</p>
+      <ion-card color="warning">
+        <ion-card-content>
+          <p>
+            <ion-icon ios="warning-outline" md="warning-sharp"></ion-icon>
+            <strong>{{ 'IMPORTANT' | translate }}! </strong>{{ 'PAYMENT_TEXT2' | translate }}
+          </p>
+        </ion-card-content>
+      </ion-card>
     </ion-card-content>
   </ion-card>
-  <ion-card color="warning">
-      <ion-card-content>
+  <ion-card>
+    <ion-card-header>
+        {{ 'PAY_DATA' | translate }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-card color="info">
+        <ion-card-content>
           <p>
-              <ion-icon ios="warning-outline" md="warning-sharp"></ion-icon>
-              <strong>{{ 'IMPORTANT' | translate }}! </strong>{{ 'PAYMENT_TEXT2' | translate }}
+            <ion-icon ios="information-circle-outline" md="information-circle-sharp"></ion-icon>
+            {{ 'PAYMENT_TEXT3' | translate }}
           </p>
-      </ion-card-content>
+        </ion-card-content>
+      </ion-card>
+      <ion-list>
+        <ion-item>
+          <ion-input label="NIT" [disabled]="detailPayment.cf" label-placement="floating" type="text" [(ngModel)]="detailPayment.nit" name="nit"></ion-input>
+        </ion-item>
+        <ion-item>
+          <!-- <ion-label>C/F</ion-label> -->
+          <ion-toggle checked="true" [(ngModel)]="detailPayment.cf" name="cf" (ngModelChange)="changeCF()">C/F</ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Recibo a nombre de" label-placement="floating" type="text" [(ngModel)]="detailPayment.nombre" name="nombre"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Correo electrónico" label-placement="floating" type="text" [(ngModel)]="detailPayment.correo" name="correo"></ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
   </ion-card>
-  <ion-button color="events" expand="block" large (click)="ordenPago()">
-          {{ 'GENERATE_PAYMENT_ORDER' | translate }}
+  <ion-button style="margin: 5px;" color="events" expand="block" large (click)="ordenPago()">
+    {{ 'GENERATE_PAYMENT_ORDER' | translate }}
   </ion-button>
 </ion-content>

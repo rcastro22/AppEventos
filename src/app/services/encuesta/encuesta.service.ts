@@ -20,7 +20,7 @@ export class EncuestaService {
   }
 
   obtener_encuesta(evento_id:any){
-    let url = `${this.basepath}obtenerFormularios?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}&EVENTO=${evento_id}`;
+    let url = `${this.basepath}obtenerFormulariosV2?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}&EVENTO=${evento_id}`;
 
     return this.http.get(url)
     .pipe(

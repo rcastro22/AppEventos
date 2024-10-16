@@ -4,21 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AsignadosPageRoutingModule } from './asignados-routing.module';
+import { PrecondicionesPageRoutingModule } from './precondiciones-routing.module';
 
-import { AsignadosPage } from './asignados.page';
+import { PrecondicionesPage } from './precondiciones.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { ImagenPipe } from 'src/app/pipes/imagen/imagen.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AsignadosPageRoutingModule,
+    PrecondicionesPageRoutingModule,
     TranslateModule.forChild({extend:true}),
-    ImagenPipe
   ],
-  declarations: [AsignadosPage]
+  declarations: [PrecondicionesPage]
 })
-export class AsignadosPageModule {}
+export class PrecondicionesPageModule {}

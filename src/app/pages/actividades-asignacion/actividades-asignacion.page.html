@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ "ASSIGN_ACTIVITIES" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card color="info">
+    <ion-card-content>
+      <p>
+        <ion-icon ios="warning-outline" md="warning-sharp"></ion-icon>
+        Tomar en cuenta que solo puedes seleccionar una actividad por horario.
+      </p>
+    </ion-card-content>
+  </ion-card>
+  @if (this.activGroupArr.length != 0) {
+    <ion-list>
+      @for (head of this.activGroupArr; track $index) {
+        @if (!isTrack) {
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>{{head.key}}</ion-label>
+            </ion-item-divider>
+          </ion-item-group>
+        }
+        
+        @for (actividad of head.value; track $index) {
+          <ion-item>
+            <ion-label>
+              @if (isTrack) {
+                <h3 style="display: flex; align-items: center;">
+                  @if (actividad.Icono_Actividad) {
+                    <!-- <img [src]="actividad.Icono_Actividad"> -->
+                    <div [innerHtml]="actividad.Icono_Actividad | imagensvg" [style]="'color:'+actividad.Color+'; padding-right: 5px;'"></div>
+                  }
+                  @else {
+                    <ion-icon name="logo-ionic" [style]="'color:'+actividad.Color+'; padding-right: 5px;'"></ion-icon>
+                  }
+                  {{actividad.Track}}
+                </h3>
+              }
+              @else {
+                <h3 style="display: flex; align-items: center;">
+                  {{actividad.Actividad}} - {{actividad.Titulo}}
+                </h3>
+                <p>
+                  {{actividad.Descripcion}}
+                </p>
+              }
+              @if (actividad.Cupo != null) {
+                <p>
+                  Cupo disponible: <ion-badge color="secondary">{{actividad.Cupo}}</ion-badge>
+                </p>
+              }
+            </ion-label>
+            <ion-button slot="end" size="medium" color="events" (click)="seleccionarActividad(actividad,this.evento)">
+              <ion-icon ios="checkbox-outline" md="checkbox-sharp"></ion-icon>
+            </ion-button>                  
+          </ion-item>
+        }
+      }
+    </ion-list>
+  }
+  
+</ion-content>

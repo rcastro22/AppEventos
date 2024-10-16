@@ -8,6 +8,42 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
+  @if(this._cp.asignados.length === 0){
+    <div class="ion-text-center no-events ">
+      <div>
+        <ion-icon ios="newspaper-outline" md="newspaper-sharp" style="font-size: 60px;" class="icon-5x"></ion-icon>
+        <br> {{ 'NO_EVENTS_ASIG' | translate }}
+      </div>
+    </div>
+  }
+  @if (_cp.asignados.length != 0) {
+    <div #popoverText>
+      @for (asig of this._cp.asignados; track $index; let idx = $index) {
+        <ion-card>
+          <img [src]="asig.Fotoevento | imagen" alt="">
+          <ion-card-content>
+            <div text-center>
+              <strong>{{asig.Tituloevento}}</strong>
+            </div>
+            <ion-row>
+              <ion-col size="6" text-left>
+                {{ 'START' | translate }}: <b>{{asig.Fechaini | date:'DD/MM/YYYY'}}</b>
+              </ion-col>
+              <ion-col size="6" text-right>
+                {{ 'END' | translate }}: <b>{{asig.Fechafin | date:'DD/MM/YYYY'}}</b>
+              </ion-col>
+            </ion-row>
+            <ion-item>
+              <ion-badge item-start style="font-size:15px">{{idx+1}}/{{_cp.asignados.length}}</ion-badge>
+              <ion-button clear item-end (click)="verDetalle(asig)">
+                {{ 'VIEW_DETAIL' | translate }}
+                <ion-icon ios="arrow-forward-outline" md="arrow-forward-sharp" slot="end"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+  }
 </ion-content>
 

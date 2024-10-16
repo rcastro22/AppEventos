@@ -69,7 +69,7 @@ export class PerfilPage implements OnInit {
     this.regUser.nacimiento = new Date(this._up.perfil.fechanac).toISOString();
     this.regUser.nacionalidad = this._up.perfil.nacionalidad;
     this.regUser.comparteDatos = (this._up.perfil.compartir ? (this._up.perfil.compartir == "checked" ? true : false) : false);
-    this.regUser.lugarTrabajo = (this._up.perfil.lugagr_trabajo == null ? "" : this._up.perfil.lugagr_trabajo);
+    this.regUser.lugarTrabajo = (this._up.perfil.lugar_trabajo == null ? "" : this._up.perfil.lugar_trabajo);
     this.regUser.puesto = (this._up.perfil.puesto == null ? "" : this._up.perfil.puesto);
     this.regUser.telefonoTrabajo = (this._up.perfil.telefono_trabajo == null ? "" : this._up.perfil.telefono_trabajo);
 

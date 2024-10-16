@@ -96,6 +96,14 @@ const routes: Routes = [
   {
     path: 'ver-orden',
     loadChildren: () => import('./pages/ver-orden/ver-orden.module').then( m => m.VerOrdenPageModule)
+  },
+  {
+    path: 'actividades-asignacion',
+    loadChildren: () => import('./pages/actividades-asignacion/actividades-asignacion.module').then( m => m.ActividadesAsignacionPageModule)
+  },
+  {
+    path: 'precondiciones',
+    loadChildren: () => import('./pages/precondiciones/precondiciones.module').then( m => m.PrecondicionesPageModule)
   }
 ];
 

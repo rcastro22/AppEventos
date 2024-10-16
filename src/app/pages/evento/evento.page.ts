@@ -5,8 +5,13 @@ import { ActionSheetController, AlertController, AnimationController, LoadingCon
 import { addIcons } from 'ionicons';
 import { DetalleLogin } from 'src/app/interfaces/DetalleLogin';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
+import { EncuestaService } from 'src/app/services/encuesta/encuesta.service';
 import { EventosService } from 'src/app/services/eventos/eventos.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { FormularioPage } from '../formulario/formulario.page';
+import { lastValueFrom } from 'rxjs';
+import { ActividadesAsignacionPage } from '../actividades-asignacion/actividades-asignacion.page';
+import { PrecondicionesPage } from '../precondiciones/precondiciones.page';
 
 @Component({
   selector: 'app-evento',
@@ -32,6 +37,7 @@ export class EventoPage implements OnInit {
     public _ep:EventosService,
     public _cp:CarritoService,
     public _up:UsuarioService,
+    private _enp:EncuestaService,
     private animationCtrl: AnimationController,
     private loadingCtrl:LoadingController,
     private alertCtrl:AlertController
@@ -105,7 +111,7 @@ export class EventoPage implements OnInit {
     const { role } = await actionSheet.onWillDismiss();
     console.log(this.evento.Evento);
     if(role == 'yes'){
-      this.addCart();
+      this.validaFormulario();
     }
   }
 
@@ -119,10 +125,25 @@ export class EventoPage implements OnInit {
       this._cp.agregar_carrito(this.evento)
       .subscribe(async data => {
         this.loading.dismiss();
+        console.log(data);
         if(data) {
           if(data.Error) {
-
+            let alert = this.modalCtrl.create({component: PrecondicionesPage});
+            (await alert).present();
           } else {
+
+            let ActivAsgObserver = this._ep.cargar_actividades_asignacion(this.evento.Evento);
+            let ActivAsg = await lastValueFrom(ActivAsgObserver);
+            
+            if(ActivAsg["Formularios"].length > 0) {
+              let modal = await this.modalCtrl.create({
+                component:ActividadesAsignacionPage, 
+                componentProps: {'evento':this.evento}});
+              (await modal).present();
+              const {data, role} = await modal.onDidDismiss();
+            }
+
+
             let alert = this.alertCtrl.create({
               header: await this._up.translateSer("ADDED"),
               message: data.Mensaje,
@@ -141,6 +162,66 @@ export class EventoPage implements OnInit {
         }
       })
     }
+  }
+
+  async validaFormulario(){
+    if(!this._up.logueado) {
+      await this._up.valida_login(document.querySelector('ion-page'),true);
+    }
+    if(this._up.logueado) {
+
+    }
+    this._enp.obtener_encuesta(this.evento.Evento)
+    .subscribe(async (data)=>{
+      this._enp.encuesta = data;
+
+      this._enp.encuesta["Formularios"].forEach((encuesta:any) => {
+        let preguntas:any[] = [];
+          encuesta.PreguntasFormulario.forEach((pregunta:any) => {
+              if(!this.busca_Pregunta(preguntas,pregunta.Pregunta)){
+                preguntas.push(pregunta);
+              }
+          });
+
+          let opciones:any[] = [];
+          preguntas.forEach(element => {
+            let opciones:any[] = [];
+            encuesta.PreguntasFormulario.forEach((element2:any) => {
+              if(element2.Pregunta == element.Pregunta){
+                opciones.push({Respuesta:element2.Respuesta, Descripcion_Respuesta:element2.Descripcion_Respuesta, checked:null});
+              }
+            });
+            element["Opciones"] = opciones;
+
+          });
+
+          encuesta.PreguntasFormulario = preguntas;
+      });
+
+      if(this._enp.encuesta["Formularios"].length > 0){
+        let modal = await this.modalCtrl.create({component:FormularioPage});
+        (await modal).present();
+        const {data, role} = await modal.onDidDismiss();
+        if(data == true) {
+          this.addCart();
+        }
+      }
+      else{
+        this.addCart();
+      }
+
+    })
+  }
+
+  busca_Pregunta(preguntas:any,pregunta:any){
+    let existe = false;
+    preguntas.forEach((preg:any) => {
+      if(preg.Pregunta == pregunta){
+        existe = true;
+      }
+    });
+
+    return existe;
   }
 
 

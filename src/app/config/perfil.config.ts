@@ -8,13 +8,14 @@ export let Perfil = {
     pasaporte: "",
     fechanac: "",
     pas_pais: "",
-    lugagr_trabajo: "",
+    lugar_trabajo: "",
     puesto: "",
     telefono_trabajo: "",
     compartir: "",
     cambiardocumento: "",
     dpi_pais: "",
     id_galileo: "",
-    es_menor: false
+    es_menor: false,
+    nit: ""
 
 }

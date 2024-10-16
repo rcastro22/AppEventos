@@ -116,6 +116,7 @@
     "PAYMENT": "Pago",
     "PAYMENT_TEXT1": "La orden de pago es un documento extendido por Universidad Galileo, en el cual se detallan todos los datos necesarios para que usted pueda emitir su pago en Banco Industrial",
     "PAYMENT_TEXT2": "La orden de pago generada, solamente será válida el día de hoy",
+    "PAYMENT_TEXT3": "Esta información será utilizada en la emisión de su recibo de pago. Ahora puede guardar el NIT en su perfil.",
     "ORDER_ERROR": "Error en Orden!",
     "NETWORKING_TEXT1": "Comparte tu información de contacto mostrando el siguiente QR.",
     "WHAT_SHARING": "¿Qué estoy compartiendo?",
@@ -184,5 +185,7 @@
     "INCLUDES_DIPLOMA": "Incluye diploma",
     "EVENT": "Evento",
     "AGENDA_ACTIVITIES": "Agenda de actividades",
-    "PLEASE_WAIT": "Por favor espere..."
+    "PLEASE_WAIT": "Por favor espere...",
+    "ASSIGN_ACTIVITIES": "Asignar actividades",
+    "PAY_DATA": "Datos de pago"
 }

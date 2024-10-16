@@ -7,6 +7,50 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="ion-text-center">
+    {{ 'NETWORKING_TEXT1' | translate }}
+    @if (this.valor.length > 0) {
+      <qrcode [qrdata]="valor" [width]="300" [errorCorrectionLevel]="'L'"></qrcode>
+    }
+  </div>
+  <ion-list class="options">
+    <ion-item icon-start style="border-radius: 15px;" (click)="showDataShare = !showDataShare">
+        <ion-icon ios="add-circle-outline" md="add-circle-sharp" *ngIf="!showDataShare"></ion-icon>
+        <ion-icon ios="remove-circle-outline" md="remove-circle-sharp" *ngIf="showDataShare"></ion-icon>
+        {{ 'WHAT_SHARING' | translate }}
+    </ion-item>
+    <div *ngIf="showDataShare">
+        <ion-list>
+            <ion-item>
+              <ion-toggle disabled checked="true">
+                  <ion-label>{{ 'NAME' | translate }}<br>
+                      <div style="font-size: 13px; color: black; padding-top: 5px">{{ this._up.perfil.nombres | titlecase }} {{ this._up.perfil.apellidos | titlecase }}</div>
+                  </ion-label>
+                </ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="dataShare.telefono" (ionChange)="changeDataShare()">
+                  <ion-label>{{ 'PHONE' | translate }}<br>
+                      <div style="font-size: 13px; color: darkgray; padding-top: 5px">{{ this.dataShareGenerated.telefono }}</div>
+                  </ion-label>
+                </ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="dataShare.email" (ionChange)="changeDataShare()">
+                  <ion-label>{{ 'EMAIL' | translate }}<br>
+                      <div style="font-size: 13px; color: darkgray ; padding-top: 5px">{{ this.dataShareGenerated.email }}</div>
+                  </ion-label>
+                </ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="dataShare.lugar_trabajo" (ionChange)="changeDataShare()">
+                  <ion-label>{{ 'WORKPLACE' | translate }}<br>
+                      <div style="font-size: 13px; color: darkgray ; padding-top: 5px">{{ this.dataShareGenerated.lugar_trabajo }}</div>
+                  </ion-label>
+                </ion-toggle>
+            </ion-item>
+        </ion-list>
+    </div>
+</ion-list>
 </ion-content>

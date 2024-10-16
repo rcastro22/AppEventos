@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { url_images } from '../../config/url.services';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
   name: 'imagen',
@@ -42,5 +43,18 @@ export class ImagenExtPipe implements PipeTransform {
     else{
       return Foto;
     }
+  }
+}
+
+
+@Pipe({
+  name: 'imagensvg',
+  standalone: true,
+})
+export class ImagenSvgPipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) {}
+
+  transform(html: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 }

@@ -116,6 +116,7 @@
     "PAYMENT": "Payment",
     "PAYMENT_TEXT1": "The payment order is a document issued by Universidad Galileo, which details all the necessary information so that you can make your payment at Banco Industrial",
     "PAYMENT_TEXT2": "The payment order generated will only be valid today",
+    "PAYMENT_TEXT3": "This information will be used to issue your payment receipt. You can now save the NIT in your profile.",
     "ORDER_ERROR": "Payment Order Error!",
     "NETWORKING_TEXT1": "Share your contact information by displaying the following QR.",
     "WHAT_SHARING": "What am I sharing?",
@@ -184,5 +185,7 @@
     "INCLUDES_DIPLOMA": "Includes diploma",
     "EVENT": "Event",
     "AGENDA_ACTIVITIES": "Agenda of activities",
-    "PLEASE_WAIT": "Please wait..."
+    "PLEASE_WAIT": "Please wait...",
+    "ASSIGN_ACTIVITIES": "Assign activities",
+    "PAY_DATA": "Payments details"
 }
