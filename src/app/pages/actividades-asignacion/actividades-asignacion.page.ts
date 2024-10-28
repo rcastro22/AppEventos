@@ -17,7 +17,7 @@ export class ActividadesAsignacionPage implements OnInit {
   activGroupArr:any = [];
   eventoHead:any = null;
   evento:any;
-  isTrack = true;
+  isTrack = false;
   isOptional = false;
 
   constructor(
@@ -27,19 +27,23 @@ export class ActividadesAsignacionPage implements OnInit {
     private toastCtrl: ToastController,
     private modalCtrl: ModalController
   ) {
-    if(this.router.getCurrentNavigation()?.extras.state){
-      this.eventoHead = this.router.getCurrentNavigation()?.extras.state!['evento'];
-      this.evento = this.eventoHead.Evento;
-
-      if(this.eventoHead != null && this.eventoHead.Asignarportrack == 1) {
-        this.isTrack = true;
-      }
-    }
+    
   }
 
   async ngOnInit() {
+    /* if(this.router.getCurrentNavigation()?.extras.state){
+      this.eventoHead = this.router.getCurrentNavigation()?.extras.state!['evento'];
+      
+    } */
+    this.evento = this.eventoHead.Evento;
+    
+    if(this.eventoHead != null && this.eventoHead.Asignarportrack == 1) {
+      this.isTrack = true;
+    }
+    console.log(this.eventoHead);
+    console.log(this.evento);
     //this.evento = "842";
-    this.evento = "818";
+    //this.evento = "818";
     this.cargarActividades();
   }
 

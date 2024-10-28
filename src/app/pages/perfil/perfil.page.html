@@ -4,14 +4,14 @@
       <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
     <ion-title>{{ 'PROFILE' | translate }}</ion-title>
-    <ion-buttons slot="primary">
+    <!-- <ion-buttons slot="primary">
       <ion-button ion-button icon-only >
           <ion-icon name="cart"></ion-icon>
           <ion-badge color="danger" class="carrito-numero" *ngIf="_cp.items.length > 0">
               {{_cp.items.length}}              
           </ion-badge>
       </ion-button> &nbsp; &nbsp;
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
   <ion-toolbar>
     <ion-segment [(ngModel)]="profile">
@@ -124,6 +124,33 @@
                   <ion-input [label]="'WORK_PHONE' | translate" label-placement="floating" type="number" [(ngModel)]="regUser.telefonoTrabajo" name="telefonotrabajo"></ion-input>
                   <!-- pattern="\d*" -->
               </ion-item>
+          </ion-item-group>
+
+          <ion-item-group>
+            <ion-item-divider ><ion-label>{{ 'TAX_INFORMATION' | translate }}</ion-label></ion-item-divider>
+            <ion-item>
+              <ion-select [label]="'TYPE_RECEIPT' | translate" label-placement="floating" (ngModelChange)="cambiar_label_tipo($event)" [(ngModel)]="this.regUser.tipoReceptor" submitText="Aceptar" cancelText="Cancelar" name="tiporeceptor">
+                @for (doc of this._pp.tiposReceptor; track $index) {
+                  @if (this._up.perfil.nacionalidad == "1" && doc.Tiporeceptor == "3") {
+                    <ion-select-option value="{{doc.Tiporeceptor}}" disabled aria-selected="true">{{doc.Descripcion}}</ion-select-option>          
+                  }
+                  @else {
+                    <ion-select-option value="{{doc.Tiporeceptor}}" aria-selected="true">{{doc.Descripcion}}</ion-select-option>          
+                  }
+                }  
+              </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-input [label]="labelTipo" label-placement="floating" type="text" [(ngModel)]="regUser.nit" name="nit"></ion-input>
+            </ion-item>
+            <ion-item>
+              @if (this.regUser.tipoReceptor != "3") {
+                <ion-input [label]="'COMPANY_NAME' | translate" disabled label-placement="floating" type="number" [(ngModel)]="regUser.razonSocial" name="razonsocial"></ion-input>
+              }
+              @else {
+                <ion-input [label]="'COMPANY_NAME' | translate" label-placement="floating" type="text" [(ngModel)]="regUser.razonSocial" name="razonsocial"></ion-input>
+              }
+            </ion-item>
           </ion-item-group>
 
           <ion-button expand="block" color="events" type="submit" [disabled]="!myForm.form.valid">      

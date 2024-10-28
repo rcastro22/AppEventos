@@ -37,6 +37,11 @@ export class CarritoService {
   cantcuotas:number = 0;
   cuotaspagar:number = 0;
   montocuotas:number = 0;
+
+  // Detalle de pago
+  nit:string = "";
+  nombre:string = "";
+  correo:string = "";
   
   transmisiones:number = 0;
   
@@ -227,15 +232,28 @@ export class CarritoService {
   }
 
   generar_orden_pago(){
-    let url = `${this.basepath}GenerarOrden?TOKEN=${this._up.credenciales.accessToken!}
+    /* let url = `${this.basepath}GenerarOrden?TOKEN=${this._up.credenciales.accessToken!}
 &TIPO=${this._up.credenciales.providerId!}
 &EVENTO=${this.eventoIdCuotas}
 &CUOTAS=${(this.cantcuotas > 0 ? "1" : "0")}
 &CANTCUOTA=${this.cantcuotas.toString()}
 &CUOTASPAGAR=${this.cuotaspagar.toString()}
-&MONTOCUOTA=${this.montocuotas.toString()}`;
+&MONTOCUOTA=${this.montocuotas.toString()}`; */
+    let url = `${this.basepath}GenerarOrden`;
 
-    let params = {};
+    let params = {
+      TOKEN: this._up.credenciales.accessToken!,
+      TIPO: this._up.credenciales.providerId!,
+      EVENTO: this.eventoIdCuotas,
+      CUOTAS: (this.cantcuotas > 0 ? "1" : "0"),
+      CANTCUOTA: this.cantcuotas.toString(),
+      CUOTASPAGAR: this.cuotaspagar.toString(),
+      MONTOCUOTA: this.montocuotas.toString(),
+      NIT: this.nit,
+      RAZONSOCIAL: this.nombre,
+      EMAIL: this.correo,
+      TIPORECEPTOR: this._up.perfil.tipoRecetor
+    };
 
     return this.http.post(url,params)
     .pipe(

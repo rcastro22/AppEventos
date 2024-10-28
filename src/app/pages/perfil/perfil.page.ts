@@ -26,6 +26,9 @@ export class PerfilPage implements OnInit {
     lugarTrabajo: "",
     puesto: "",
     telefonoTrabajo: "",
+    tipoReceptor: "",
+    nit: "",
+    razonSocial: "",
   }
 
   public estPerfil = {
@@ -46,6 +49,7 @@ export class PerfilPage implements OnInit {
   ]
 
   labelDocumento:string = "";
+  labelTipo:string = "";
 
   constructor(
     public _cp:CarritoService,
@@ -92,6 +96,10 @@ export class PerfilPage implements OnInit {
       this.regUser.tipoDoc = "3";
     }
 
+    this.regUser.tipoReceptor = this._up.perfil.tipoRecetor;
+    this.regUser.nit = this._up.perfil.nit;
+    this.regUser.razonSocial = this._up.perfil.razonSocial;
+
     //this.docPerfil.fechanac = moment(new Date(this._up.perfil.fechanac)).format("YYYY-MM-DD");
     //this.admPerfil.fechanac = moment(new Date(this._up.perfil.fechanac)).format("YYYY-MM-DD");
     //this.estPerfil.fechanac = moment(new Date(this._up.perfil.fechanac)).format("YYYY-MM-DD");
@@ -103,16 +111,35 @@ export class PerfilPage implements OnInit {
 
   cambia_label(event:any){
   
-        switch (event) {
-          case "1":this.labelDocumento = "DPI";
-            break;
-          case "2":this.labelDocumento = "Pasaporte";
-            break;
-          default:this.labelDocumento = "";
-            break;
-        }
-        this.regUser.documento = "";
+    switch (event) {
+      case "1":this.labelDocumento = "DPI";
+        break;
+      case "2":this.labelDocumento = "Pasaporte";
+        break;
+      default:this.labelDocumento = "";
+        break;
+    }
+    this.regUser.documento = "";
         
+  }
+
+  cambiar_label_tipo(event:any){
+    switch (event) {
+      case "4":
+        this.labelTipo = "NIT";
+        this.regUser.nit = this._up.perfil.nit;
+        break;
+      case "3":
+        this.labelTipo = "No. Pasaporte / Identificación";
+        this.regUser.nit = this._up.perfil.pasaporte;
+        break;
+      case "2":
+        this.labelTipo = "CUI";
+        this.regUser.nit = this._up.perfil.dpi;
+        break;
+      default:this.labelTipo = "";
+        break;
+    }
   }
 
   actualizar_cuenta(){

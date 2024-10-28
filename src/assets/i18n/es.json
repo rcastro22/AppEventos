@@ -187,5 +187,9 @@
     "AGENDA_ACTIVITIES": "Agenda de actividades",
     "PLEASE_WAIT": "Por favor espere...",
     "ASSIGN_ACTIVITIES": "Asignar actividades",
-    "PAY_DATA": "Datos de pago"
+    "PAY_DATA": "Datos de pago",
+    "TAX_INFORMATION": "Información tributaria",
+    "TYPE_RECEIPT": "Tipo",
+    "NIT": "NIT",
+    "COMPANY_NAME": "Razón social"
 }

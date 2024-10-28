@@ -138,7 +138,7 @@ export class EventoPage implements OnInit {
             if(ActivAsg["Formularios"].length > 0) {
               let modal = await this.modalCtrl.create({
                 component:ActividadesAsignacionPage, 
-                componentProps: {'evento':this.evento}});
+                componentProps: {'eventoHead':this.evento}});
               (await modal).present();
               const {data, role} = await modal.onDidDismiss();
             }

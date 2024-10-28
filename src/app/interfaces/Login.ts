@@ -4,6 +4,9 @@ export interface Login {
 
 export interface Perfil {
     Email:                   string;
+    Idemail:                 string;
+    Tiporeceptor:            string;
+    RazonSocial:             string;
     Nombres:                 string;
     Apellidos:               string;
     Telefono:                string;

@@ -402,6 +402,8 @@ export class UsuarioService {
     this.perfil.id_galileo = perfil.Id_Galileo;
     this.perfil.es_menor = perfil.EsMenor;
     this.perfil.nit = perfil.Nit;
+    this.perfil.tipoRecetor = perfil.Tiporeceptor;
+    this.perfil.razonSocial = perfil.RazonSocial;
   }
 
   public guardar_storage() {

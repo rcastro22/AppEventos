@@ -25,8 +25,15 @@
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of this._up.pages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              @if(this._cp.items.length > 0 && p.title == 'CART'){                
-                <ion-badge slot="end" color="danger">{{this._cp.items.length}}</ion-badge>
+              @if((this._cp.items.length > 0 && p.title == 'CART') || (this._cp.asignados.length > 0 && p.title == 'ASSIGNED')){                
+                <ion-badge slot="end" color="danger">
+                  @if (p.title == 'CART') {
+                    {{this._cp.items.length}}
+                  }
+                  @else {
+                    {{this._cp.asignados.length}}
+                  }
+                </ion-badge>
               }
               <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'" *ngIf="p.icon"></ion-icon>
               <img class="iconImg" src="../assets/imgs/menu/{{p.image}}" alt="" *ngIf="p.image" >

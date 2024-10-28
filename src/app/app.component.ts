@@ -46,6 +46,8 @@ export class AppComponent {
       "networking-sharp": "assets/icon/mdi--human-greeting-proximity.svg",
       "network-sharp": "assets/icon/fluent--people-team-toolbox-20-filled.svg",
       "network-outline": "assets/icon/fluent--people-team-toolbox-20-regular.svg",
+      "badge-outline": "assets/icon/badge-outline.svg",
+      "badge-sharp": "assets/icon/badge-sharp.svg",
     })
     console.log("Inicia");
     

@@ -14,6 +14,7 @@ export class PerfilService {
   basepath = url_services;
 
   paises: any[] = [];
+  tiposReceptor: any[] = [];
   paisescentroamerica: any[] = [];
 
   perfilEstudiante: any = [];
@@ -42,6 +43,7 @@ export class PerfilService {
     await lastValueFrom(datosPerfilObserver).then(data => {
       let perfil = data.perfil[0]  as Perfil;
       this.paises = data.paises;
+      this.tiposReceptor = data.tiposReceptor;
       this.paisescentroamerica = data.paisesCentroamerica;
       this.perfilAdministrativo = data.perfiladministrativo;
       this.perfilDocente = data.perfildocente;
@@ -79,7 +81,10 @@ export class PerfilService {
       COMPARTIR: datos.comparteDatos == true ? "1" : "0",
       LUGARTRABAJO: datos.lugarTrabajo,
       PUESTO: datos.puesto,
-      TELEFONOTRABAJO: datos.telefonoTrabajo
+      TELEFONOTRABAJO: datos.telefonoTrabajo,
+      NIT: datos.nit,
+      TIPORECEPTOR: datos.tipoReceptor,
+      RAZONSOCIAL: datos.razonSocial
     }
 
     let datosPerfilObserver = this.http.post(url, data)

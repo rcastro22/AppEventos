@@ -16,6 +16,8 @@ export let Perfil = {
     dpi_pais: "",
     id_galileo: "",
     es_menor: false,
-    nit: ""
+    nit: "",
+    tipoRecetor: "",
+    razonSocial: ""
 
 }

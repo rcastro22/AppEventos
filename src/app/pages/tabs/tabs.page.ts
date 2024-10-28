@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CarritoService } from 'src/app/services/carrito/carrito.service';
 
 
 @Component({
@@ -9,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class TabsPage implements OnInit {
 
   constructor(
+    public _cp:CarritoService,
   ) {
    }
 

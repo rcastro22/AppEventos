@@ -94,7 +94,9 @@ export class HomePage implements OnInit {
         
         if(this._up.logueado){
           this._cp.cargar_carrito();
-          //this._cp.cargar_asignados();
+          this._cp.cargar_asignados().subscribe(data => {
+            this._cp.asignados = data;
+          });
         }
 
         if (val && val.trim() != '') {

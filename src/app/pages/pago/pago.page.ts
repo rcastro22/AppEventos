@@ -17,9 +17,17 @@ export class PagoPage implements OnInit {
   loading:any;
 
   public detailPayment = {
-    nit: "",
-    cf: true,
-    nombre: "CONSUMIDOR FINAL",
+    nit: this._up.perfil.nit,
+    cf: ((this._up.perfil.nit == "" 
+      || this._up.perfil.nit == "C/F" 
+      || this._up.perfil.nit == "CF" 
+      || this._up.perfil.nit == "F/C" 
+      || this._up.perfil.nit == "FC") ? true : false),
+    nombre: ((this._up.perfil.nit == "" 
+      || this._up.perfil.nit == "C/F" 
+      || this._up.perfil.nit == "CF" 
+      || this._up.perfil.nit == "F/C" 
+      || this._up.perfil.nit == "FC") ? "CONSUMIDOR FINAL" : this._up.perfil.nombres + " " + this._up.perfil.apellidos),
     correo: this._up.perfil.email,
   }
 
@@ -55,6 +63,10 @@ export class PagoPage implements OnInit {
 
   async genOP(){
     await this.showLoader(await this.getTextLoading("PROCESS_PAY_ORDER"));
+
+    this._cp.nit = this.detailPayment.nit;
+    this._cp.nombre = this.detailPayment.nombre;
+    this._cp.correo = this.detailPayment.correo;
 
     this._cp.generar_orden_pago()
     .subscribe(async (data) => {
