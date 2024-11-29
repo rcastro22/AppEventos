@@ -1,25 +1,80 @@
-<!-- <ion-header [translucent]="true">
+<ion-header>
+  
   <ion-toolbar>
-    <ion-buttons slot="start">
-       <ion-back-button text=""></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="canDismiss()">{{"ADD_TO_CART" | translate}}</ion-button>
-    </ion-buttons>
+    <div class="flexible-space" [ngStyle]="{'height': headerHeight + 'px'}">
+      @if (evento) {
+        <img id="myimg" [src]="evento.Fotoevento | imagen" alt="" [ngStyle]="{'opacity': imageOpacity}">
+        <div class="header-background" [ngStyle]="{'background': backgroundColor}"></div>
+        <ion-buttons slot="start">
+          <ion-button (click)="returnPage()">
+            <ion-icon name="arrow-back-outline" color="light"></ion-icon>
+          </ion-button>
+          <!-- <ion-back-button text=""></ion-back-button> -->
+        </ion-buttons>
+        <ion-title>        
+          <!-- <div class="header-title" [ngStyle]="{'opacity': titleOpacity}"> -->
+            <div class="header-title"  [ngStyle]="{'font-size':fontSizeTitle+'px','text-wrap':fontSizeWrap}">
+              <strong>{{ evento.Tituloevento }}</strong>
+            </div>
+          </ion-title>
+        }
+      <!-- <div class="header-title" [ngStyle]="{'opacity': titleOpacity}">
+        <h1>Flexible Header</h1>
+      </div> -->
+    </div>
   </ion-toolbar>
-</ion-header> -->
+  <ion-toolbar>
+    <ion-segment color="events" [scrollable]="true" [(ngModel)]="segmento">
+      <ion-segment-button value="event">
+        <ion-icon ios="list-outline" md="list-sharp"></ion-icon>
+        <ion-label>{{ "EVENT" | translate  }}</ion-label>
+      </ion-segment-button>
+      @if(this._ep.evento_detalle.Detalle && this._ep.evento_detalle.Detalle.length > 0){
+      <ion-segment-button value="include">
+        <ion-icon ios="content-view-regular" md="content-view-filled"></ion-icon>
+        <ion-label>{{ "INCLUDE" | translate  }}</ion-label>
+      </ion-segment-button>
+      }
+      @if(this._ep.evento_detalle.Horario && this._ep.evento_detalle.Horario.length > 0){
+      <ion-segment-button value="schedule">
+        <ion-icon ios="time-outline" md="time-sharp"></ion-icon>
+        <ion-label>{{ "SCHEDULE" | translate }}</ion-label>
+      </ion-segment-button>
+      }
+      @if((this._ep.evento_detalle.Personal && this._ep.evento_detalle.Personal.length > 0) ||
+      (this._ep.evento_detalle.PersonalExterno && this._ep.evento_detalle.PersonalExterno.length > 0)){
+      <ion-segment-button value="ourteam">
+        <ion-icon ios="people-outline" md="people-sharp"></ion-icon>
+        <ion-label>{{ "OUR_TEAM" | translate }}</ion-label>
+      </ion-segment-button>
+      }
+      @if(this._ep.evento_detalle.Galeria && this._ep.evento_detalle.Galeria.length > 0){
+      <ion-segment-button value="gallery">
+        <ion-icon ios="images-outline" md="images-sharp"></ion-icon>
+        <ion-label>{{ "GALLERY" | translate }}</ion-label>
+      </ion-segment-button>
+      }
+      @if(this._ep.evento_detalle.Agenda && this._ep.evento_detalle.Agenda.length > 0){
+      <ion-segment-button value="calendar" (click)="setDefaultCalendar()">
+        <ion-icon ios="calendar-schedule" md="calendar-schedule-fill"></ion-icon>
+        <ion-label>{{ "DIARY" | translate }}</ion-label>
+      </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" scrollEvents="">
   <ion-fab slot="fixed" horizontal="end" vertical="top">
     <ion-fab-button color="medium" (click)="presentActionSheet()">
       <ion-icon name="cart-plus" color="light" id="end" ></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <div class="img">
+ <!--  <div class="img">
     <div class="top">
       <div class="back_div">
         <ion-icon name="arrow-back-outline" color="light" (click)="returnPage()"></ion-icon>
-        <!-- <ion-icon name="cart-plus" color="light" id="end" (click)="presentActionSheet()"></ion-icon> -->
+        
       </div>
     </div>
     <div class="bottom">
@@ -28,103 +83,70 @@
       </div>
     </div>
     <img id="myimg" [src]="evento.Fotoevento | imagen" alt="">
-  </div>
-  <ion-segment color="events" [scrollable]="true" [(ngModel)]="segmento">
-    <ion-segment-button value="event">
-      <ion-icon ios="list-outline" md="list-sharp"></ion-icon>
-      <ion-label>{{ "EVENT" | translate  }}</ion-label>
-    </ion-segment-button>
-    @if(this._ep.evento_detalle.Detalle && this._ep.evento_detalle.Detalle.length > 0){
-    <ion-segment-button value="include">
-      <ion-icon ios="content-view-regular" md="content-view-filled"></ion-icon>
-      <ion-label>{{ "INCLUDE" | translate  }}</ion-label>
-    </ion-segment-button>
-    }
-    @if(this._ep.evento_detalle.Horario && this._ep.evento_detalle.Horario.length > 0){
-    <ion-segment-button value="schedule">
-      <ion-icon ios="time-outline" md="time-sharp"></ion-icon>
-      <ion-label>{{ "SCHEDULE" | translate }}</ion-label>
-    </ion-segment-button>
-    }
-    @if((this._ep.evento_detalle.Personal && this._ep.evento_detalle.Personal.length > 0) ||
-    (this._ep.evento_detalle.PersonalExterno && this._ep.evento_detalle.PersonalExterno.length > 0)){
-    <ion-segment-button value="ourteam">
-      <ion-icon ios="people-outline" md="people-sharp"></ion-icon>
-      <ion-label>{{ "OUR_TEAM" | translate }}</ion-label>
-    </ion-segment-button>
-    }
-    @if(this._ep.evento_detalle.Galeria && this._ep.evento_detalle.Galeria.length > 0){
-    <ion-segment-button value="gallery">
-      <ion-icon ios="images-outline" md="images-sharp"></ion-icon>
-      <ion-label>{{ "GALLERY" | translate }}</ion-label>
-    </ion-segment-button>
-    }
-    @if(this._ep.evento_detalle.Agenda && this._ep.evento_detalle.Agenda.length > 0){
-    <ion-segment-button value="calendar" (click)="setDefaultCalendar()">
-      <ion-icon ios="calendar-schedule" md="calendar-schedule-fill"></ion-icon>
-      <ion-label>{{ "DIARY" | translate }}</ion-label>
-    </ion-segment-button>
-    }
-  </ion-segment>
+  </div> -->
+  
   @switch(segmento){
     @case ("event"){
-      <ion-grid class="event">
-        <ion-row>
-          <ion-col class="ion-text-start">{{"START"|translate}}: <strong>{{evento.Fechaini|date: 'dd/MM/YYYY'}}</strong></ion-col>
-          <ion-col class="ion-text-end">{{"END"|translate}}: <strong>{{evento.Fechafin|date: 'dd/MM/YYYY'}}</strong></ion-col>
-        </ion-row>
-        @if(evento.Finasignacion){
+      @if(evento){
+
+        <ion-grid class="event">
           <ion-row>
-            <ion-col>
-              <ion-icon ios="calendar-outline" md="calendar-sharp"></ion-icon> {{ 'LAST_DAY_TO_GET_IT' | translate }}: <strong style="color:brown;">{{evento.Finasignacion | date: 'dd/MM/YYYY'}}</strong>
-            </ion-col>
+            <ion-col class="ion-text-start">{{"START"|translate}}: <strong>{{evento.Fechaini|date: 'dd/MM/YYYY'}}</strong></ion-col>
+            <ion-col class="ion-text-end">{{"END"|translate}}: <strong>{{evento.Fechafin|date: 'dd/MM/YYYY'}}</strong></ion-col>
           </ion-row>
-        }
-        @if(evento.Ocultar_Precio != "1"){
+          @if(evento.Finasignacion){
+            <ion-row>
+              <ion-col>
+                <ion-icon ios="calendar-outline" md="calendar-sharp"></ion-icon> {{ 'LAST_DAY_TO_GET_IT' | translate }}: <strong style="color:brown;">{{evento.Finasignacion | date: 'dd/MM/YYYY'}}</strong>
+              </ion-col>
+            </ion-row>
+          }
+          @if(evento.Ocultar_Precio != "1"){
+            <ion-row>
+              @if(evento.Precio != null && evento.Precio != 0){                  
+                <ion-col class="ion-text-start">
+                  <ion-icon ios="card-outline" md="card-sharp"></ion-icon>
+                  @if(evento.Monto_Descuentoautomev != null && evento.Monto_Descuentoautomev != 0){
+                    <strong style="text-decoration: line-through; "> {{evento.Precio | currency:'Q':'code'}}</strong>
+                  }
+                  <strong style="color: rgb(0, 127, 0);"> {{evento.Precio - evento.Monto_Descuentoautomev | currency:'Q':'code'}}</strong>
+                </ion-col>
+              }
+              @if(evento.Precio == null || evento.Precio == 0){
+                <ion-col class="ion-text-start">
+                  <strong color="primary">{{"FREE" | translate}}</strong>
+                </ion-col>
+              }
+              @if(evento.Desc_Descuentoautomev != null && evento.Desc_Descuentoautomev != ""){
+                <ion-col class="ion-text-end">
+                  <ion-badge color="light" style="color: rgb(188, 88, 236);">
+                    <ion-icon ios="pricetag-outline" md="pricetag-sharp"></ion-icon>
+                    {{evento.Desc_Descuentoautomev}}
+                  </ion-badge>
+                </ion-col>                
+              }
+            </ion-row>
+          }
           <ion-row>
-            @if(evento.Precio != null && evento.Precio != 0){                  
+            @if(evento.Pagos > 1){
               <ion-col class="ion-text-start">
-                <ion-icon ios="card-outline" md="card-sharp"></ion-icon>
-                @if(evento.Monto_Descuentoautomev != null && evento.Monto_Descuentoautomev != 0){
-                  <strong style="text-decoration: line-through; "> {{evento.Precio | currency:'Q':'code'}}</strong>
-                }
-                <strong style="color: rgb(0, 127, 0);"> {{evento.Precio - evento.Monto_Descuentoautomev | currency:'Q':'code'}}</strong>
-              </ion-col>
-            }
-            @if(evento.Precio == null || evento.Precio == 0){
-              <ion-col class="ion-text-start">
-                <strong color="primary">{{"FREE" | translate}}</strong>
-              </ion-col>
-            }
-            @if(evento.Desc_Descuentoautomev != null && evento.Desc_Descuentoautomev != ""){
-              <ion-col class="ion-text-end">
-                <ion-badge color="light" style="color: rgb(188, 88, 236);">
-                  <ion-icon ios="pricetag-outline" md="pricetag-sharp"></ion-icon>
-                  {{evento.Desc_Descuentoautomev}}
+                <ion-badge color="events">
+                  <ion-icon ios="cash-outline" md="cash-sharp"></ion-icon>
+                  {{"UP_TO_PAYMENTS" | translate:{value:evento.Pagos} }}
                 </ion-badge>
-              </ion-col>                
-            }
+              </ion-col>
+            }                
+            @if(evento.Diploma == 1){
+              <ion-col class="ion-text-end">
+                <ion-badge color="light" style="color: rgb(227, 103, 45);">
+                  <ion-icon ios="diploma-outline" md="diploma-sharp"></ion-icon>
+                  {{ "INCLUDES_DIPLOMA" | translate }}
+                </ion-badge>
+              </ion-col>  
+              }
           </ion-row>
-        }
-        <ion-row>
-          @if(evento.Pagos > 1){
-            <ion-col class="ion-text-start">
-              <ion-badge color="events">
-                <ion-icon ios="cash-outline" md="cash-sharp"></ion-icon>
-                {{"UP_TO_PAYMENTS" | translate:{value:evento.Pagos} }}
-              </ion-badge>
-            </ion-col>
-          }                
-          @if(evento.Diploma == 1){
-            <ion-col class="ion-text-end">
-              <ion-badge color="light" style="color: rgb(227, 103, 45);">
-                <ion-icon ios="diploma-outline" md="diploma-sharp"></ion-icon>
-                {{ "INCLUDES_DIPLOMA" | translate }}
-              </ion-badge>
-            </ion-col>  
-            }
-        </ion-row>
-      </ion-grid>
+        </ion-grid>
+      }
     }
     @case ("include"){
       @if(this._ep.evento_detalle.Detalle && this._ep.evento_detalle.Detalle.length != 0){

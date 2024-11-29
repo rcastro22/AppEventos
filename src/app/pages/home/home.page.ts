@@ -53,6 +53,10 @@ export class HomePage implements OnInit {
     
     this.cargar_eventos().then(()=>{
       this.loading.dismiss();
+
+      if(this._up.logueado){
+        this._ep.cargar_actividades_asistencia();
+      }
     });
     
     
@@ -94,9 +98,7 @@ export class HomePage implements OnInit {
         
         if(this._up.logueado){
           this._cp.cargar_carrito();
-          this._cp.cargar_asignados().subscribe(data => {
-            this._cp.asignados = data;
-          });
+          this._cp.cargar_asignados();
         }
 
         if (val && val.trim() != '') {

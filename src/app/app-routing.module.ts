@@ -38,7 +38,8 @@ const routes: Routes = [
   },
   {
     path: 'gafete',
-    loadChildren: () => import('./pages/gafete/gafete.module').then( m => m.GafetePageModule)
+    loadChildren: () => import('./pages/gafete/gafete.module').then( m => m.GafetePageModule),
+    canActivate: [authGuard]
   },
   {
     path: 'networking',
@@ -69,10 +70,10 @@ const routes: Routes = [
     path: 'livetream',
     loadChildren: () => import('./pages/livetream/livetream.module').then( m => m.LivetreamPageModule)
   },
-  {
+  /* {
     path: 'evento',
     loadChildren: () => import('./pages/evento/evento.module').then( m => m.EventoPageModule)
-  },
+  }, */
   {
     path: 'modal-image',
     loadChildren: () => import('./pages/modal-image/modal-image.module').then( m => m.ModalImagePageModule)
@@ -104,6 +105,18 @@ const routes: Routes = [
   {
     path: 'precondiciones',
     loadChildren: () => import('./pages/precondiciones/precondiciones.module').then( m => m.PrecondicionesPageModule)
+  },
+  {
+    path: 'actividades-finalizadas',
+    loadChildren: () => import('./pages/actividades-finalizadas/actividades-finalizadas.module').then( m => m.ActividadesFinalizadasPageModule)
+  },
+  {
+    path: 'actividades-activas',
+    loadChildren: () => import('./pages/actividades-activas/actividades-activas.module').then( m => m.ActividadesActivasPageModule)
+  },
+  {
+    path: 'actividades-proximas',
+    loadChildren: () => import('./pages/actividades-proximas/actividades-proximas.module').then( m => m.ActividadesProximasPageModule)
   }
 ];
 

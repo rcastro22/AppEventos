@@ -40,8 +40,8 @@
   </ion-nav-link> -->
 
   <div class="welcome">
-    <ion-label>Bienvenido{{' '+ this._up.perfil.nombres }}!</ion-label><br>
-    <ion-label>a Eventos Galileo</ion-label>
+    <ion-label style="font-size: 1.5rem; line-height: 2rem; font-weight: 700;">Bienvenido{{' '+ this._up.perfil.nombres }}!</ion-label><br>
+    <ion-label class="text-2xl font-bold text-gray-800">a Eventos Galileo</ion-label>
   </div>
   @if (this._ep.eventos.length >= 0) {
     <ion-segment color="events" [scrollable]="true" [(ngModel)]="categoria">

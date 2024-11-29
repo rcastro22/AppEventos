@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController, AlertController, AnimationController, LoadingController, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -19,8 +19,9 @@ import { PrecondicionesPage } from '../precondiciones/precondiciones.page';
   styleUrls: ['./evento.page.scss'],
 })
 export class EventoPage implements OnInit {
-    
+  
   evento:any;
+  eventoId:any;
   segmento:string = 'event';
   calendario:string = "";
   detalleCalendario:any;
@@ -33,6 +34,7 @@ export class EventoPage implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,
     public router: Router,
+    private route: ActivatedRoute,
     public location: Location,
     public _ep:EventosService,
     public _cp:CarritoService,
@@ -53,10 +55,53 @@ export class EventoPage implements OnInit {
     })
   }
 
-  ngOnInit() {
-    if(this.router.getCurrentNavigation()?.extras.state){
-      this.evento = this.router.getCurrentNavigation()?.extras.state!['evento'];
+
+  headerHeight: number = 200; // Altura inicial del header flexible
+  titleOpacity: number = 1; // Opacidad inicial del título
+  imageOpacity: number = 0.4; // Opacidad inicial de la imagen
+  backgroundColor: string = 'rgba(0, 0, 0, 1)'; // Color inicial
+  fontSizeTitle: number = 30; // Tamaño de la fuente inicial
+  fontSizeWrap: string = "balance"; // Ajuste de tamaño de fuente
+
+  onScroll(event: any) {
+    const scrollTop = event.detail.scrollTop;
+    //console.log(scrollTop);
+    // Ajustar la altura del header dinámicamente
+    this.headerHeight = Math.max(60, 200 - scrollTop);
+
+    // Cambiar la opacidad del título según el scroll
+    this.titleOpacity = Math.max(0, 1 - scrollTop / 150);
+    this.imageOpacity = Math.max(0, 0.4 - scrollTop / 350);
+
+    // Calcular el color dinámico en función de la altura
+    const heightRatio = (this.headerHeight - 70) / 130; // Proporción entre 70 y 200
+    const startColor = { r: 0, g: 0, b: 0 }; // Azul inicial
+    const endColor = { r: 21, g: 149, b: 151 }; // Amarillo final
+
+    // Interpolar los colores
+    const r = Math.round(startColor.r + (endColor.r - startColor.r) * (1 - heightRatio));
+    const g = Math.round(startColor.g + (endColor.g - startColor.g) * (1 - heightRatio));
+    const b = Math.round(startColor.b + (endColor.b - startColor.b) * (1 - heightRatio));
+
+    this.backgroundColor = `rgba(${r}, ${g}, ${b}, 1)`;
+
+    this.fontSizeTitle = Math.max(20, 30 - scrollTop / 20);
+    if (this.headerHeight <= 80) {
+      this.fontSizeWrap = "inherit";
     }
+    else {
+      this.fontSizeWrap = "balance";
+    }
+  }
+
+  ngOnInit() {
+    /* if(this.router.getCurrentNavigation()?.extras.state){
+      this.evento = this.router.getCurrentNavigation()?.extras.state!['evento'];
+    }    */ 
+    this.route.params.subscribe(params => {
+      this.eventoId = Number(params['evento']);
+      console.log(this.eventoId);
+    });
 
     this._ep.evento_detalle = {} as DetalleLogin;
     console.log(this._ep.evento_detalle.Detalle);
@@ -64,13 +109,18 @@ export class EventoPage implements OnInit {
 
 
   returnPage() {
+    console.log("regresar");
     this.location.back();
   }
 
   ionViewDidEnter(){
     console.log("entro");
-    
-    this._ep.cargar_detalle(this.evento);
+        
+    this._ep.cargar_evento(this.eventoId)
+    .subscribe(data=>{
+      this.evento = data.Eventos[0];
+      this._ep.cargar_detalle(this.evento);
+    });
   }
 
   async getTextLoading(msg:string) {

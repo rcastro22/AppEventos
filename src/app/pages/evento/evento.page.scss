@@ -1,14 +1,128 @@
-ion-toolbar {
+/* ion-toolbar {
     --background: var(--ion-color-events-contrast);
-}
+} */
 
-ion-toolbar.ios {
+/* ion-toolbar.ios {
     --border-width: 0 0 0px !important;
 }
 
 ion-header.md {
     box-shadow: 0 0;
+} */
+
+/* ion-header {
+    transition: height 0.3s ease;
+    
+    &.scrolled {
+      height: 60px; // Altura reducida
+  
+      ion-toolbar {
+        --min-height: 60px;
+      }
+    }
+  
+    ion-title {
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+  
+      &.small-title {
+        font-size: 1rem;
+      }
+    }
+  } */
+
+
+
+  /* .header-large {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 200px;
+    padding: 0 0px;
+    transition: all 0.8s ease-in-out;
+    background: black;
+    color: white;
+
+    #myimg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.4;
+        position: absolute;
+        padding: 4px;
+        margin-left: -4px;
+    }
+  }
+  
+  .header-small {
+    height: 44px;
+    background: #159597;
+
+    #myimg {
+        display: none;
+    }
+  }
+  
+  .header-title {
+    font-size: 24px;
+    transition: font-size 0.5s ease-in-out;
+    //justify-self: center;
+    text-align: center;
+    white-space: normal;
+  }
+  
+  .title-small {
+    font-size: 16px;
+    white-space: nowrap;
+  } */
+
+  //////////////////
+  .flexible-space {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    transition: height 0.3s ease;
 }
+
+.header-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    //background: linear-gradient(to bottom, #3880ff, #ffffff);
+    background: #159597;
+    z-index: -1;
+    transition: background 0.3s ease;
+    /* Transición suave de color */
+}
+
+#myimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    position: absolute;
+    transition: opacity 0.3s ease;
+    //padding: 4px;
+    //margin-left: -4px;
+}
+
+.header-title {
+    display: flex;
+    align-items: flex-end;
+    //justify-content: center;
+    height: 100%;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    text-wrap: balance;
+    // transition: opacity 0.3s ease;
+    transition: font-size 0.3s ease;
+}
+
+
+/////////////////////
 
 ion-content {
     --background: #fff;
@@ -245,3 +359,4 @@ swiper-slide img {
         border-radius: 25px;
     }
   }
+

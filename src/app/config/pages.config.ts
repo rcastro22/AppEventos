@@ -12,7 +12,7 @@ export const PAGES = [
     { icon: 'newspaper', image: '', title: 'ASSIGNED', component: AsignadosPage, show: true, url:"/tabs/tabAsignados" },
     { icon: 'cart', image: '', title: 'CART', component: CarritoPage, show: true, url:"/carrito" },
     // { icon: 'timer', image: '', title: 'Historial de pagos', component: HistorialPage, show: false },
-    { icon: 'badge', image: '', title: 'VIRTUAL_BADGE', component: GafetePage, show: false },
-    { icon: '', image: 'lector3.png', title: 'Registro de asistencia', component: TabsAsistenciaPage, show: false },
+    { icon: 'badge', image: '', title: 'VIRTUAL_BADGE', component: GafetePage, show: false, url:"/gafete" },
+    { icon: 'scan-qrcode', image: '', title: 'Registro de asistencia', component: TabsAsistenciaPage, show: false, url:"/tabs-asistencia/activas" },
     { icon: 'network', image: '', title: 'NETWORKING', component: NetworkingPage, show: true, url:"/networking" }
   ];

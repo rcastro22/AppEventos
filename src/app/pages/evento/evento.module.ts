@@ -17,7 +17,7 @@ import { ImagenPerfilPipe, ImagenPipe } from 'src/app/pipes/imagen/imagen.pipe';
     IonicModule,
     EventoPageRoutingModule,
     TranslateModule.forChild({extend:true}),
-    ImagenPipe, ImagenPerfilPipe
+    ImagenPipe, ImagenPerfilPipe,
   ],
   declarations: [EventoPage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -4,21 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { GafetePageRoutingModule } from './gafete-routing.module';
+import { ActividadesActivasPageRoutingModule } from './actividades-activas-routing.module';
 
-import { GafetePage } from './gafete.page';
+import { ActividadesActivasPage } from './actividades-activas.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GafetePageRoutingModule,
+    ActividadesActivasPageRoutingModule,
     TranslateModule.forChild({extend:true}),
-    QRCodeModule
   ],
-  declarations: [GafetePage]
+  declarations: [ActividadesActivasPage]
 })
-export class GafetePageModule {}
+export class ActividadesActivasPageModule {}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { isPlatform, MenuController, Platform } from '@ionic/angular';
 import { register } from 'swiper/element/bundle';
 
@@ -12,6 +12,8 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { addIcons } from 'ionicons';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment.prod';
+import { Router } from '@angular/router';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 
 register();
 
@@ -38,7 +40,9 @@ export class AppComponent {
     public _cp:CarritoService,
     private menuCtrl:MenuController,
     public translateService:TranslateService,
-    private storage: Storage
+    private storage: Storage,
+    private router: Router,
+    private zone: NgZone
   ) {
 
     addIcons({
@@ -48,6 +52,8 @@ export class AppComponent {
       "network-outline": "assets/icon/fluent--people-team-toolbox-20-regular.svg",
       "badge-outline": "assets/icon/badge-outline.svg",
       "badge-sharp": "assets/icon/badge-sharp.svg",
+      "scan-qrcode-sharp": "assets/icon/scan-qrcode.svg",
+      "scan-qrcode-outline": "assets/icon/scan-qrcode.svg",
     })
     console.log("Inicia");
     
@@ -94,6 +100,16 @@ export class AppComponent {
         scopes: ['profile','email'],
         grantOfflineAccess: true,
       })
-    })
+    });
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      this.zone.run(() => {
+        console.log('App opened with URL: ' + event.url);
+        const slug = event.url.split(".app").pop();
+        if(slug){
+          //this.router.navigate([event.url]);
+          this.router.navigateByUrl(slug);
+        }
+      });
+    });
   }
 }

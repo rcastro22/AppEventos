@@ -5,7 +5,7 @@ import { url_services, url_services_proxy } from '../../config/url.services';
 import { Platform, LoadingController } from '@ionic/angular';
 import { UsuarioService } from '../usuario/usuario.service';
 import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 
 import { DetalleLogin } from 'src/app/interfaces/DetalleLogin';
 
@@ -58,6 +58,25 @@ export class EventosService {
     }else{
       url = `${this.basepath}eventoslogin`;
     }
+
+    return this.http.get(url).pipe(
+      //map(resp=>resp.),
+      catchError(error=>{
+        if(error._body == "\"Usuario no encontrado\"" && this._up.logueado){
+          //this._up.cerrar_sesion();
+        }
+        //return error;
+        return of(error).pipe(
+          map(val => error.error)
+        );
+      })
+    );      
+  }
+
+  cargar_evento(evento:any){
+    console.log('llego'+evento);
+    let url = "";
+    url = `${this.basepath}eventosloginid/${evento}`;
 
     return this.http.get(url).pipe(
       //map(resp=>resp.),
@@ -246,5 +265,80 @@ export class EventosService {
         return of(error);
       })
     );
+  }
+
+
+  cargar_actividades_asistencia(){
+    this.actividades_asistencia = [];
+    this.eventos_pasados = [];
+    this.eventos_actuales = [];
+    this.eventos_futuros = [];
+    this.actividades_pasadas = [];
+    this.actividades_actuales = [];
+    this.actividades_futuras = [];
+
+    let url = `${this.basepath}actividadesAsistencia?TOKEN=${this._up.credenciales.accessToken}&TIPO=${this._up.credenciales.providerId}`;
+    let obtenerActAsistObserver = this.http.get(url)
+    .pipe(
+      map(resp => JSON.parse(JSON.stringify(resp))),
+    );
+
+    let obtenerActAsist = lastValueFrom(obtenerActAsistObserver);
+
+    obtenerActAsist.then(data => {
+    
+      this.actividades_asistencia = data;
+      for (let actividad of this.actividades_asistencia) {
+        if (actividad.Tiempo == 'PASADO') {
+          this.actividades_pasadas.push(actividad);
+          this.ingresarEvento(actividad, this.eventos_pasados);
+        } else if(actividad.Tiempo == 'PRESENTE') {
+          this.actividades_actuales.push(actividad);
+          this.ingresarEvento(actividad, this.eventos_actuales);
+        } else if(actividad.Tiempo == 'FUTURO') {
+          this.actividades_futuras.push(actividad);
+          this.ingresarEvento(actividad, this.eventos_futuros);
+        }
+      }
+
+      if (this.eventos_pasados.length == 1){
+        this.eventos_pasados[0].Open = true;
+      }
+      if (this.eventos_actuales.length == 1){
+        this.eventos_actuales[0].Open = true;
+      }
+      if (this.eventos_futuros.length == 1){
+        this.eventos_futuros[0].Open = true;
+      }
+
+      this._up.pagesInit.forEach(page => {
+        if(page.title == 'Registro de asistencia') {
+          if(this.actividades_asistencia && this.actividades_asistencia.length > 0) {
+            page.show = true;
+          } else {
+            page.show = false;
+          }
+        }
+      });
+      this._up.pages = this._up.pagesInit.filter(page => {
+        return page.show === true;
+      });
+    });
+
+  }
+
+  ingresarEvento(actividad:any, lista:any){
+    let ingresado = false;
+
+    for (const evento of lista) {
+      if (evento.Evento === actividad.Evento) {
+        ingresado = true;
+        break;
+      }
+    }
+
+    if (!ingresado) {
+      lista.push({Evento: actividad.Evento, Nombre: actividad.Titulo_Evento, Open: false})
+    }
   }
 }

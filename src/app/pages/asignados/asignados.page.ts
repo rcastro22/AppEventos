@@ -22,66 +22,12 @@ export class AsignadosPage implements OnInit {
 
   async ngOnInit() {
     await this.showLoader("");
-    this._cp.cargar_asignados()
-    .subscribe(data=>{
+    this._cp.cargar_asignados().then(()=>{
       this.loading.dismiss();
-      this._cp.asignados = data;
-      this._cp.transmisiones = 0;
-      this._cp.asignados.forEach(evAsig => {
-        evAsig.Encuestas.forEach((encuesta:any) => {
-
-          let preguntas:any[] = [];
-          encuesta.Preguntas.forEach((pregunta:any) => {
-            //if(pregunta.Formato_Respuesta == "4"){
-              if(!this.busca_Pregunta(preguntas,pregunta.Pregunta)){
-                preguntas.push(pregunta);
-              }
-            //}
-            //else{
-            //  preguntas.push(pregunta);
-            //}
-          });
-
-          let opciones:any[] = [];
-          preguntas.forEach(element => {
-            let opciones:any[] = [];
-            encuesta.Preguntas.forEach((element2:any) => {
-              if(element2.Pregunta == element.Pregunta){
-                opciones.push({Respuesta:element2.Respuesta, Descripcion_Respuesta:element2.Descripcion_Respuesta, checked:null});
-              }
-            });
-            element["Opciones"] = opciones;
-
-          });
-
-          encuesta.Preguntas = preguntas;
-
-        });
-        
-        evAsig.Videoconferencias.forEach((transmision:any) => {
-          if(transmision.Flagconferencia == 1){
-            this._cp.transmisiones = this._cp.transmisiones + 1;
-          }
-        });
-      });
-
-      if(this._cp.asignados.length > 0){
-        this._up.pagesInit.forEach(page => {
-          if(page.title == 'VIRTUAL_BADGE') {
-            page.show = true;
-          }
-        });
-        this._up.pages = this._up.pagesInit.filter(page => {
-          return page.show === true;
-        });
-      }
-
     });
+    
   }
-
-  busca_Pregunta(preguntas: any[], pregunta: any): boolean {
-    return preguntas.some(p => p.Pregunta === pregunta);
-  }
+  
 
   async getTextLoading(msg:string) {
     return await this._cp.translateSer(msg);
@@ -98,7 +44,9 @@ export class AsignadosPage implements OnInit {
 
   verDetalle(asig:any){
     //this.navCtrl.push(DetalleAsignadoPage,{'asig':asig})
-    this.router.navigate(['/detalle-asignado'],{queryParams:{asig:asig}});
+    //this.router.navigate(['/detalle-asignado'],{queryParams:{asig:asig}});
+    console.log(asig);
+    this.router.navigate(['/evento',asig.Evento]);
   }
 
 }

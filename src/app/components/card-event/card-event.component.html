@@ -1,4 +1,4 @@
-<ion-card routerDirection="forward" [routerLink]="['/evento']" [state]="{ evento:evento }">
+<ion-card routerDirection="forward" [routerLink]="['/evento',evento.Evento]" >
   @if(evento.Precio == null || evento.Precio == 0){
     <div class="freebanner">
       <div>{{"FREE" | translate}}</div>

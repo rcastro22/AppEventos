@@ -1,13 +1,16 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>tabsAsistencia</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">tabsAsistencia</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="finalizadas">
+      <ion-icon name="time" ios="time-outline" md="time-sharp"></ion-icon>
+      <ion-label>Finalizadas</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="activas">
+      <ion-icon name="time" ios="time-outline" md="time-sharp"></ion-icon>
+      <ion-label>Activas</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="proximas">
+      <ion-icon name="time" ios="time-outline" md="time-sharp"></ion-icon>
+      <ion-label>Proximas</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

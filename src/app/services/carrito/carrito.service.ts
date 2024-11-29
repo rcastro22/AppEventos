@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UsuarioService } from '../usuario/usuario.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, catchError, lastValueFrom, map, of } from 'rxjs';
 
 import { url_services } from "../../config/url.services";
 import { CarritoRoot } from 'src/app/interfaces/Carrito';
@@ -288,10 +288,10 @@ export class CarritoService {
     )
   }
 
-  cargar_asignados(hiddeLoading?:boolean){
+  async cargar_asignados(hiddeLoading?:boolean){
     let url = `${this.basepath}Asignados?TOKEN=${this._up.credenciales.accessToken!}&TIPO=${this._up.credenciales.providerId!}`;
 
-    return this.http.get(url)
+    let asignadosObserver = this.http.get(url)
     .pipe(
       map(resp => JSON.parse(JSON.stringify(resp))),
       catchError(err=>{
@@ -301,73 +301,65 @@ export class CarritoService {
         return of("");
       })
     );
-    /* .subscribe(data=>{
-      if(hiddeLoading == false) this.loading.dismiss();
-      this.asignados = data;
-      this.transmisiones = 0;
-      console.log(this.asignados);
-      this.asignados.forEach(evAsig => {
-        evAsig.Encuestas.forEach(encuesta => {
 
-          let preguntas:any[] = [];
-          encuesta.Preguntas.forEach(pregunta => {
-            //if(pregunta.Formato_Respuesta == "4"){
-              if(!this.busca_Pregunta(preguntas,pregunta.Pregunta)){
-                preguntas.push(pregunta);
-              }
-            //}
-            //else{
-            //  preguntas.push(pregunta);
-            //}
-          });
+    let asignadosRet = await lastValueFrom(asignadosObserver);
 
+      
+    this.asignados = asignadosRet;
+    this.transmisiones = 0;
+    this.asignados.forEach(evAsig => {
+      evAsig.Encuestas.forEach((encuesta:any) => {
+
+        let preguntas:any[] = [];
+        encuesta.Preguntas.forEach((pregunta:any) => {
+          //if(pregunta.Formato_Respuesta == "4"){
+            if(!this.busca_Pregunta(preguntas,pregunta.Pregunta)){
+              preguntas.push(pregunta);
+            }
+          //}
+          //else{
+          //  preguntas.push(pregunta);
+          //}
+        });
+
+        let opciones:any[] = [];
+        preguntas.forEach(element => {
           let opciones:any[] = [];
-          preguntas.forEach(element => {
-            let opciones:any[] = [];
-            encuesta.Preguntas.forEach(element2 => {
-              if(element2.Pregunta == element.Pregunta){
-                opciones.push({Respuesta:element2.Respuesta, Descripcion_Respuesta:element2.Descripcion_Respuesta, checked:null});
-              }
-            });
-            element["Opciones"] = opciones;
-
+          encuesta.Preguntas.forEach((element2:any) => {
+            if(element2.Pregunta == element.Pregunta){
+              opciones.push({Respuesta:element2.Respuesta, Descripcion_Respuesta:element2.Descripcion_Respuesta, checked:null});
+            }
           });
-
-          encuesta.Preguntas = preguntas;
+          element["Opciones"] = opciones;
 
         });
-        
-        evAsig.Videoconferencias.forEach(transmision => {
-          if(transmision.Flagconferencia == 1){
-            this.transmisiones = this.transmisiones + 1;
-          }
-        });
+
+        encuesta.Preguntas = preguntas;
+
       });
+      
+      evAsig.Videoconferencias.forEach((transmision:any) => {
+        if(transmision.Flagconferencia == 1){
+          this.transmisiones = this.transmisiones + 1;
+        }
+      });
+    });
 
-      if(this.asignados.length > 0){
-        this._up.pagesInit.forEach(page => {
-          if(page.title == 'VIRTUAL_BADGE') {
-            page.show = true;
-          }
-        });
-        this._up.pages = this._up.pagesInit.filter(page => {
-          return page.show === true;
-        });
-      }
+    if(this.asignados.length > 0){
+      this._up.pagesInit.forEach(page => {
+        if(page.title == 'VIRTUAL_BADGE') {
+          page.show = true;
+        }
+      });
+      this._up.pages = this._up.pagesInit.filter(page => {
+        return page.show === true;
+      });
+    }
 
-      //console.log(preguntas);
 
-      //this.encuestas_asig = [];
-      //this.asignados[0]["Encuestas"].forEach(encuesta => {
-      //  this.encuestas_asig.push(encuesta);
-      //});
-//
-      //this.formularios_asig = [];
-      //this.asignados[0]["Formulario"].forEach(formulario => {
-      //  this.formularios_asig.push(formulario);
-      //});
+  }
 
-    }); */
-
+  busca_Pregunta(preguntas: any[], pregunta: any): boolean {
+    return preguntas.some(p => p.Pregunta === pregunta);
   }
 }

@@ -1,13 +1,31 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>gafete</ion-title>
+  <ion-toolbar color="events">
+    <ion-buttons ion-button slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ 'VIRTUAL_BADGE' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">gafete</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <h3 class="ion-text-center">{{this._up.perfil.nombres}} {{this._up.perfil.apellidos}}</h3>
+  <div class="ion-text-center">
+    @if (!this._pp.carneVirtualQR) {
+      <ion-spinner></ion-spinner>
+    }
+    @else {
+      <qrcode [qrdata]="this._pp.carneVirtualQR" [width]="300" [errorCorrectionLevel]="'L'"></qrcode>
+    }
+  </div>
+  <ion-list>
+    @for (asig of this._cp.asignados; track $index) {
+      <ion-item>
+        <ion-icon ios="radio-button-on-outline" md="radio-button-on-sharp" slot="start" ></ion-icon>        
+        <ion-label>
+          <h3>{{ asig.Tituloevento }}</h3>
+          <p>{{ asig.Perfil }}</p>
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
 </ion-content>

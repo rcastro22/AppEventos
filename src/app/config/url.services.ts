@@ -3,7 +3,7 @@
 // Rutas para Movil
 // const url_server = "https://betaeventos.galileo.edu:8081";     // BETA
 // const url_server = "https://betaeventos.galileo.edu";                // PRODUCCION
-const url_server = "http://localhost:8000";                // PRODUCCION
+ const url_server = "http://localhost:8000";                // PRODUCCION
 
 // Rutas para Computadora
 // const url_server_prxy = "/proxyapibeta";                       // BETA
